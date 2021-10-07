@@ -1,0 +1,6 @@
+cn\byxll\GoodsApplication.class
+cn\byxll\service\BrandService.class
+cn\byxll\controller\BaseExceptionHandler.class
+cn\byxll\controller\BrandController.class
+cn\byxll\dao\BrandMapper.class
+cn\byxll\service\impl\BrandServiceImpl.class
