@@ -11,6 +11,7 @@
         <module name="DogBro-Mall-Eureka" />
         <module name="Mall-Service-Goods-Api" />
         <module name="Mall-Service-Goods" />
+        <module name="Mall-Service-File" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -22,6 +23,7 @@
       <module name="DogBro-Mall-Service" target="8" />
       <module name="DogBro-Mall-Service-Api" target="8" />
       <module name="DogBro-Mall-Web" target="8" />
+      <module name="Mall-Service-File" target="8" />
       <module name="Mall-Service-Goods" target="8" />
       <module name="Mall-Service-Goods-Api" target="8" />
       <module name="Service-Goods" target="8" />
@@ -38,6 +40,7 @@
       <module name="DogBro-Mall-Service" options="-parameters" />
       <module name="DogBro-Mall-Service-Api" options="-parameters" />
       <module name="DogBro-Mall-Web" options="-parameters" />
+      <module name="Mall-Service-File" options="-parameters" />
       <module name="Mall-Service-Goods" options="-parameters" />
       <module name="Mall-Service-Goods-Api" options="-parameters" />
       <module name="Service-Goods" options="-parameters" />

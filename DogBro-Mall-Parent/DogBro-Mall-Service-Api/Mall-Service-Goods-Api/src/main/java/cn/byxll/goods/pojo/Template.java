@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 /**
- * 模板实体
+ * 统计分类的规格和参数个数表
  * @author By-Lin
  */
 @ApiModel(description = "Template",value = "Template")

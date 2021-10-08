@@ -1,4 +1,4 @@
-package cn.byxll.controller;
+package controller;
 
 import entity.Result;
 import entity.StatusCode;

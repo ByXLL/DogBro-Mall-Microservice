@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * 品牌分类数据库
+ * 品牌分类关系数据库
  * @author By-Lin
  */
 @ApiModel(description = "CategoryBrand",value = "CategoryBrand")

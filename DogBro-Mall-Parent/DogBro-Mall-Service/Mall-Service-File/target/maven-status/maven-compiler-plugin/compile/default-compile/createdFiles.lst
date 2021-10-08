@@ -1,0 +1,4 @@
+cn\byxll\entity\FastDFSFile.class
+cn\byxll\util\FastDFSUtil.class
+cn\byxll\controller\FileUploadController.class
+cn\byxll\FileApplication.class
