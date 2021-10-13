@@ -2,6 +2,7 @@ package cn.byxll.service;
 
 import cn.byxll.goods.pojo.Album;
 import com.github.pagehelper.PageInfo;
+import entity.Result;
 
 import java.util.List;
 
@@ -13,55 +14,58 @@ public interface AlbumService {
     /**
      * 新增相册
      * @param album     相册实体
+     * @return 响应数据
      */
-    void add(Album album);
+    Result<Boolean> add(Album album);
 
     /**
      * 删除相册
      * @param id    相册id
+     * @return 响应数据
      */
-    void delete(Long id);
+    Result<Boolean> delete(Long id);
 
     /**
      * 修改相册
      * @param album     相册实体
+     * @return 响应数据
      */
-    void update(Album album);
+    Result<Boolean> update(Album album);
 
     /**
      * 查询所有相册
-     * @return      相册实体集合
+     * @return      响应数据
      */
-    List<Album> findAll();
+    Result<List<Album>> findAll();
 
     /**
      * 通过id查询相册
      * @param id    相册id
-     * @return      相册实体
+     * @return      响应数据
      */
-    Album findById(Long id);
+    Result<Album> findById(Long id);
 
     /**
      * 按条件查询相册集合
      * @param album     相册条件实体
-     * @return          相册实体集合
+     * @return          响应数据
      */
-    List<Album> findListByParam(Album album);
+    Result<List<Album>> findListByParam(Album album);
 
     /**
      * 相册分页查询
      * @param page          当前页码
      * @param pageSize      每页大小
-     * @return              分页信息
+     * @return              响应数据
      */
-    PageInfo<Album> findPage(Integer page, Integer pageSize);
+    Result<PageInfo<Album>> findPage(Integer page, Integer pageSize);
 
     /**
      * 根据条件分页查询
      * @param album         相册条件实体
      * @param page          当前页码
      * @param pageSize      每页大小
-     * @return              分页信息
+     * @return              响应数据
      */
-    PageInfo<Album> findPageByParam(Album album, Integer page, Integer pageSize);
+    Result<PageInfo<Album>> findPageByParam(Album album, Integer page, Integer pageSize);
 }

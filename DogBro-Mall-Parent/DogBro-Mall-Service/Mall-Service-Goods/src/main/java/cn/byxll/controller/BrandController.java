@@ -28,8 +28,7 @@ public class BrandController {
      */
     @GetMapping
     public Result<List<Brand>> findAll() {
-        List<Brand> brandList = brandService.findAll();
-        return new Result<>(true, StatusCode.OK, "查询成功", brandList);
+        return brandService.findAll();
     }
 
     /**
@@ -37,8 +36,7 @@ public class BrandController {
      */
     @GetMapping("/{id}")
     public Result<Brand> findById(@PathVariable("id") Integer id) {
-        Brand brand = brandService.findById(id);
-        return new Result<>(true, StatusCode.OK, "查询成功", brand);
+        return brandService.findById(id);
     }
 
     /**
@@ -46,52 +44,46 @@ public class BrandController {
      */
     @PostMapping("/search")
     public Result<List<Brand>> findList(@RequestBody Brand brand) {
-        List<Brand> brandList = brandService.findByEntity(brand);
-        return new Result<>(true, StatusCode.OK, "数据查询成功", brandList);
+        return brandService.findByEntity(brand);
     }
 
     /**
      * 分页查询
      */
     @GetMapping("/search/{page}/{pageSize}")
-    public Result<PageInfo<Brand>> findPage(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        PageInfo<Brand> brandPageInfo = brandService.findByPager(page, pageSize);
-        return new Result<>(true,StatusCode.OK,"查询成功",brandPageInfo);
+    public Result<PageInfo<Brand>> findPager(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
+        return brandService.findByPager(page, pageSize);
     }
 
     /**
      * 条件分页查询
      */
     @PostMapping("/search/{page}/{pageSize}")
-    public Result<PageInfo<Brand>> findPage(@RequestBody Brand brand, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        PageInfo<Brand> brandPageInfo = brandService.findByPagerEntity(brand, page, pageSize);
-        return new Result<>(true,StatusCode.OK,"查询成功",brandPageInfo);
+    public Result<PageInfo<Brand>> findPagerParam(@RequestBody Brand brand, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
+        return brandService.findByPagerParam(brand, page, pageSize);
     }
 
     /**
      * 添加品牌
      */
     @PostMapping("/add")
-    public Result<Object> add(@RequestBody Brand brand) {
-        brandService.add(brand);
-        return new Result<>(true,StatusCode.OK,"添加成功");
+    public Result<Boolean> add(@RequestBody Brand brand) {
+        return brandService.add(brand);
     }
 
     /**
      * 修改品牌
      */
     @PostMapping("/update")
-    public Result<Object> update(@RequestBody Brand brand) {
-        brandService.update(brand);
-        return new Result<>(true,StatusCode.OK,"修改成功");
+    public Result<Boolean> update(@RequestBody Brand brand) {
+        return brandService.update(brand);
     }
 
     /**
      * 删除品牌
      */
     @DeleteMapping("/{id}")
-    public Result<Object> delete(@PathVariable("id") Integer id) {
-        brandService.delete(id);
-        return new Result<>(true,StatusCode.OK,"删除成功");
+    public Result<Boolean> delete(@PathVariable("id") Integer id) {
+        return brandService.delete(id);
     }
 }

@@ -5,20 +5,60 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a792584-6bf6-4ec8-91f4-97f441ce2575" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/controller/AlbumController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/dao/AlbumMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/AlbumService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/impl/AlbumServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/resources/mybatis-config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/controller/TemplateController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/dao/TemplateMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/TemplateService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/impl/TemplateServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/src/main/java/entity/StatusCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/src/main/java/entity/StatusCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/DogBro-Mall-Common-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/BCrypt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/CacheKey.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/ChineseUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/HttpClient$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/HttpClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/IdWorker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/Message.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/Page.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/PageResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/RandomValueUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/Result.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/classes/entity/StatusCode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Common/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service-Api/Mall-Service-Goods-Api/target/Mall-Service-Goods-Api-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service-Api/Mall-Service-Goods-Api/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service-Api/Mall-Service-Goods-Api/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service-Api/Mall-Service-Goods-Api/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target/Mall-Service-File-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target/Mall-Service-File-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target/classes/cn/byxll/controller/FileUploadController.class" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target/classes/cn/byxll/controller/FileUploadController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target/classes/cn/byxll/util/FastDFSUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target/classes/cn/byxll/util/FastDFSUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/Mall-Service-Goods-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/Mall-Service-Goods-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/controller/AlbumController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/controller/AlbumController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/controller/BrandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/controller/BrandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/AlbumService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/AlbumService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/BrandService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/BrandService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/impl/AlbumServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/impl/AlbumServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/impl/BrandServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/src/main/java/cn/byxll/service/impl/BrandServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/Mall-Service-Goods-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/META-INF/additional-spring-configuration-metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/GoodsApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/controller/AlbumController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/controller/BrandController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/dao/AlbumMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/dao/BrandMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/service/AlbumService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/service/BrandService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/service/impl/AlbumServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/cn/byxll/service/impl/BrandServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/classes/mybatis-config.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,13 +111,14 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.runner" />
+    <property name="settings.editor.selected.configurable" value="yiiguxing.plugin.translate" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="cn.byxll.service.impl" />
       <recent name="cn.byxll.service" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -165,6 +206,12 @@
       <workItem from="1633695378121" duration="8369000" />
       <workItem from="1633749029813" duration="7270000" />
       <workItem from="1634001739246" duration="941000" />
+      <workItem from="1634030671334" duration="2257000" />
+      <workItem from="1634049201555" duration="4489000" />
+      <workItem from="1634054105745" duration="1027000" />
+      <workItem from="1634084730486" duration="10822000" />
+      <workItem from="1634105607108" duration="4109000" />
+      <workItem from="1634128115073" duration="4096000" />
     </task>
     <servers />
   </component>

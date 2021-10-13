@@ -29,9 +29,8 @@ public class AlbumController {
      * @return          响应结果
      */
     @PostMapping("/add")
-    public Result<Object> add(@RequestBody Album album) {
-        albumService.add(album);
-        return new Result<>(true, StatusCode.OK,"添加成功");
+    public Result<Boolean> add(@RequestBody Album album) {
+        return albumService.add(album);
     }
 
     /**
@@ -40,9 +39,8 @@ public class AlbumController {
      * @return          响应结果
      */
     @DeleteMapping("/delete/{id}")
-    public Result<Object> delete(@PathVariable("id") Long id) {
-        albumService.delete(id);
-        return new Result<>(true,StatusCode.OK,"删除成功");
+    public Result<Boolean> delete(@PathVariable("id") Long id) {
+        return albumService.delete(id);
     }
 
     /**
@@ -51,9 +49,8 @@ public class AlbumController {
      * @return          响应结果
      */
     @PostMapping("/update")
-    public Result<Object> update(@RequestBody Album album) {
-        albumService.update(album);
-        return new Result<>(true,StatusCode.OK,"修改成功");
+    public Result<Boolean> update(@RequestBody Album album) {
+        return albumService.update(album);
     }
 
     /**
@@ -63,7 +60,7 @@ public class AlbumController {
      */
     @GetMapping("/{id}")
     public Result<Album> findById(@PathVariable("id") Long id) {
-        return new Result<>(true,StatusCode.OK,"查询成功",albumService.findById(id));
+        return albumService.findById(id);
     }
 
     /**
@@ -71,9 +68,8 @@ public class AlbumController {
      * @return      响应结果
      */
     @GetMapping("/")
-    public Result<Object> findAll() {
-        List<Album> albumList = albumService.findAll();
-        return new Result<>(true,StatusCode.OK,"查询成功",albumList);
+    public Result<List<Album>> findAll() {
+        return albumService.findAll();
     }
 
     /**
@@ -83,8 +79,7 @@ public class AlbumController {
      */
     @PostMapping("/search")
     public Result<List<Album>> findList(@RequestBody Album album) {
-        List<Album> albumList = albumService.findListByParam(album);
-        return new Result<>(true,StatusCode.OK,"查询成功",albumList);
+        return albumService.findListByParam(album);
     }
 
     /**
@@ -95,8 +90,7 @@ public class AlbumController {
      */
     @GetMapping("/search/{page}/{pageSize}")
     public Result<PageInfo<Album>> findPage(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        PageInfo<Album> pageInfo = albumService.findPage(page, pageSize);
-        return new Result<>(true,StatusCode.OK,"查询成功",pageInfo);
+        return albumService.findPage(page, pageSize);
     }
 
     /**
@@ -107,9 +101,8 @@ public class AlbumController {
      * @return              响应结果
      */
     @PostMapping("/search/{page}/{pageSize}")
-    public Result<List<Album>> findPageByParam(@RequestBody Album album, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        PageInfo<Album> pageInfo = albumService.findPageByParam(album, page, pageSize);
-        return new Result<>(true,StatusCode.OK,"查询成功",pageInfo);
+    public Result<PageInfo<Album>> findPageByParam(@RequestBody Album album, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
+        return albumService.findPageByParam(album, page, pageSize);
     }
 }
 

@@ -5,6 +5,8 @@ import cn.byxll.goods.pojo.Brand;
 import cn.byxll.service.BrandService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import entity.Result;
+import entity.StatusCode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -26,99 +28,118 @@ public class BrandServiceImpl implements BrandService {
 
     /**
      * 查询所有品牌
-     * @return 品牌 list
+     * @return      响应数据
      */
     @Override
-    public List<Brand> findAll() {
-        return brandMapper.selectAll();
+    public Result<List<Brand>> findAll() {
+        return new Result<>(true, StatusCode.OK, "获取成功", brandMapper.selectAll());
     }
 
     /**
      * 通过id查询一个品牌
-     *
      * @param id 品牌id
-     * @return 品牌实体
+     * @return 响应数据
      */
     @Override
-    public Brand findById(Integer id) {
-        return brandMapper.selectByPrimaryKey(id);
+    public Result<Brand> findById(Integer id) {
+        if(id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常", null); }
+        return new Result<>(true, StatusCode.OK, "查询成功", brandMapper.selectByPrimaryKey(id));
     }
 
     /**
      * 通过条件查询品牌
-     *
      * @param brand 品牌实体
-     * @return 品牌集合
+     * @return 响应数据
      */
     @Override
-    public List<Brand> findByEntity(Brand brand) {
+    public Result<List<Brand>> findByEntity(Brand brand) {
+        if(brand == null) {
+            return new Result<>(false, StatusCode.ARGERROR, "参数异常");
+        }
         Example example = createExample(brand);
-        return brandMapper.selectByExample(example);
+        return new Result<>(true, StatusCode.OK, "查询成功", brandMapper.selectByExample(example));
     }
 
     /**
      * 分页查询
-     *
      * @param page     当前页面
      * @param pageSize 每页大小
-     * @return 分页实体
+     * @return 响应数据
      */
     @Override
-    public PageInfo<Brand> findByPager(Integer page, Integer pageSize) {
+    public Result<PageInfo<Brand>> findByPager(Integer page, Integer pageSize) {
+        if(page == null || pageSize == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
         // 生成分页查询对象
         PageHelper.startPage(page, pageSize);
         // 查询集合
         List<Brand> brandList = brandMapper.selectAll();
-        return new PageInfo<>(brandList);
+        return new Result<>(true, StatusCode.OK, "查询成功", new PageInfo<>(brandList));
     }
 
     /**
      * 条件分页查询
-     *
      * @param brand    条件实体
      * @param page     当前页
      * @param pageSize 每页大小
-     * @return 分页实体
+     * @return 响应数据
      */
     @Override
-    public PageInfo<Brand> findByPagerEntity(Brand brand, Integer page, Integer pageSize) {
+    public Result<PageInfo<Brand>> findByPagerParam(Brand brand, Integer page, Integer pageSize) {
+        if(brand == null || page == null || pageSize == null) {
+            return new Result<>(false, StatusCode.ARGERROR, "参数异常");
+        }
         // 生成分页查询对象
         PageHelper.startPage(page, pageSize);
         // 搜索数据
         Example example = createExample(brand);
         List<Brand> brandList = brandMapper.selectByExample(example);
         // 封装PageInfo
-        return new PageInfo<>(brandList);
+        // 返回数据
+        return new Result<>(true, StatusCode.OK, "查询成功", new PageInfo<>(brandList));
     }
 
 
     /**
      * 增加品牌
-     * @param brand 品牌实体
+     * @param brand 响应数据
      */
     @Override
-    public void add(Brand brand) {
-        brandMapper.insertSelective(brand);
+    public Result<Boolean> add(Brand brand) {
+        if(brand == null) {
+            return new Result<>(false, StatusCode.ARGERROR, "参数异常");
+        }
+        int i = brandMapper.insertSelective(brand);
+        if(i>0) { return new Result<>(true, StatusCode.OK, "添加成功"); }
+        return new Result<>(false, StatusCode.ERROR, "操作失败");
     }
 
     /**
      * 编辑品牌
-     *
-     * @param brand 品牌实体
+     * @param brand 响应数据
      */
     @Override
-    public void update(Brand brand) {
-        brandMapper.updateByPrimaryKeySelective(brand);
+    public Result<Boolean> update(Brand brand) {
+        if (brand == null) {
+            return new Result<>(false, StatusCode.ARGERROR, "参数异常");
+        }
+        int i = brandMapper.updateByPrimaryKeySelective(brand);
+        if(i>0) { return new Result<>(true, StatusCode.OK, "修改成功"); }
+        return new Result<>(false, StatusCode.ERROR, "操作失败");
     }
 
     /**
      * 删除品牌
-     *
      * @param id 品牌id
+     * @return  响应数据
      */
     @Override
-    public void delete(Integer id) {
-        brandMapper.deleteByPrimaryKey(id);
+    public Result<Boolean> delete(Integer id) {
+        if(id == null) {
+            return new Result<>(false, StatusCode.ARGERROR, "参数异常");
+        }
+        int i = brandMapper.deleteByPrimaryKey(id);
+        if(i>0) { return new Result<>(true, StatusCode.OK, "删除成功"); }
+        return new Result<>(false, StatusCode.ERROR, "操作失败");
     }
 
     /**
