@@ -108,7 +108,7 @@ public class AlbumServiceImpl implements AlbumService {
      * @return          响应数据
      */
     @Override
-    public Result<PageInfo<Album>> findPage(Integer page, Integer pageSize) {
+    public Result<PageInfo<Album>> findPager(Integer page, Integer pageSize) {
         if(page == null || pageSize == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常",null); }
         // 静态分页
         PageHelper.startPage(page,pageSize);
@@ -123,7 +123,7 @@ public class AlbumServiceImpl implements AlbumService {
      * @return          响应数据
      */
     @Override
-    public Result<PageInfo<Album>> findPageByParam(Album album, Integer page, Integer pageSize) {
+    public Result<PageInfo<Album>> findPagerByParam(Album album, Integer page, Integer pageSize) {
         if(album == null || page == null || pageSize == null) {
             return new Result<>(false, StatusCode.ARGERROR, "参数异常");
         }

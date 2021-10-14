@@ -58,7 +58,7 @@ public interface AlbumService {
      * @param pageSize      每页大小
      * @return              响应数据
      */
-    Result<PageInfo<Album>> findPage(Integer page, Integer pageSize);
+    Result<PageInfo<Album>> findPager(Integer page, Integer pageSize);
 
     /**
      * 根据条件分页查询
@@ -67,5 +67,5 @@ public interface AlbumService {
      * @param pageSize      每页大小
      * @return              响应数据
      */
-    Result<PageInfo<Album>> findPageByParam(Album album, Integer page, Integer pageSize);
+    Result<PageInfo<Album>> findPagerByParam(Album album, Integer page, Integer pageSize);
 }

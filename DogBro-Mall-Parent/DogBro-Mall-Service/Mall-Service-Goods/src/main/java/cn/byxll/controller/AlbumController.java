@@ -89,8 +89,8 @@ public class AlbumController {
      * @return              响应结果
      */
     @GetMapping("/search/{page}/{pageSize}")
-    public Result<PageInfo<Album>> findPage(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        return albumService.findPage(page, pageSize);
+    public Result<PageInfo<Album>> findPager(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
+        return albumService.findPager(page, pageSize);
     }
 
     /**
@@ -101,8 +101,8 @@ public class AlbumController {
      * @return              响应结果
      */
     @PostMapping("/search/{page}/{pageSize}")
-    public Result<PageInfo<Album>> findPageByParam(@RequestBody Album album, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        return albumService.findPageByParam(album, page, pageSize);
+    public Result<PageInfo<Album>> findPagerByParam(@RequestBody Album album, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
+        return albumService.findPagerByParam(album, page, pageSize);
     }
 }
 
