@@ -115,6 +115,7 @@ public class SpecServiceImpl implements SpecService {
     @Override
     public Result<PageInfo<Spec>> findPagerByParam(Spec spec, Integer page, Integer pageSize) {
         if(spec == null || page == null || pageSize == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常",null); }
+        PageHelper.startPage(page, pageSize);
         Example example = createExample(spec);
         List<Spec> specList = specMapper.selectByExample(example);
         return new Result<>(true,StatusCode.OK,"查询成功", new PageInfo<>(specList));
