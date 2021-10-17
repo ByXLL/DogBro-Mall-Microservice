@@ -71,6 +71,13 @@ public class ParaController {
         return paraService.findByPager(page, pageSize);
     }
 
+    /**
+     * 按条件分页查询
+     * @param para      参数实体
+     * @param page      当前页码
+     * @param pageSize  每页大小
+     * @return          响应数据
+     */
     @PostMapping("/search/{page}/{pageSize}")
     public Result<PageInfo<Para>> findPagerByParam(@RequestBody Para para, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
         return paraService.findPagerByParam(para, page, pageSize);

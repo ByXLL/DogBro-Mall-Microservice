@@ -8,6 +8,13 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/dogbro_mall_goods?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: Aa123456
+  ## 让404错误抛出异常，需要同时设置spring.resources.add-mappings为false
+  mvc:
+    throw-exception-if-no-handler-found: true
+  # 禁用静态资源的自动映射，如不禁用，不存在的url将被映射到/**，servlet不有机会抛出异常
+  web:
+    resources:
+      add-mappings: false
 
 # eureka 客户端
 eureka:
