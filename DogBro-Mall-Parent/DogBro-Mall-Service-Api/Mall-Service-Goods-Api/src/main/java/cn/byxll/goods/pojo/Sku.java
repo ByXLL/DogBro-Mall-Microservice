@@ -95,6 +95,11 @@ public class Sku implements Serializable{
 	@ApiModelProperty(value = "商品状态 1-正常，2-下架，3-删除",required = false)
 	private String status;
 
+//	@Column(name = "version")
+//	@ApiModelProperty(value = "乐观锁")
+//	private Integer version;
+
+
 	public Long getId() {
 		return id;
 	}
