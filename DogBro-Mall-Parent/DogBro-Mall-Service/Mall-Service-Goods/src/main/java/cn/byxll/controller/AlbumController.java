@@ -13,8 +13,8 @@ import java.util.List;
  * 相册控制器
  * @author By-Lin
  */
-@RestController
 @CrossOrigin
+@RestController
 @RequestMapping("/album")
 public class AlbumController {
     private final AlbumServiceImpl albumService;
