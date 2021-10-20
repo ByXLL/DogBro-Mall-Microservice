@@ -66,7 +66,7 @@ public class SpecController {
      * 查询所有规格
      * @return      响应数据
      */
-    @GetMapping("/")
+    @GetMapping("/list")
     public Result<List<Spec>> findAll() {
         return specService.findAll();
     }
@@ -92,5 +92,15 @@ public class SpecController {
     @PostMapping("/search/{page}/{pageSize}")
     public Result<PageInfo<Spec>> findPagerByParam(@RequestBody Spec spec, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
         return specService.findPagerByParam(spec, page, pageSize);
+    }
+
+    /**
+     * 通过模板id查询规格
+     * @param templateId        模板id
+     * @return                  响应数据
+     */
+    @GetMapping("/findByTemplateId/{templateId}")
+    public Result<List<Spec>> findByTemplateId(@PathVariable("templateId") Integer templateId) {
+        return specService.findByTemplateId(templateId);
     }
 }

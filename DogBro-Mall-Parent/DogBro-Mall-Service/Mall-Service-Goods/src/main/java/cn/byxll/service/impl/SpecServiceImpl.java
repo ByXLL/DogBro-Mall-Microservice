@@ -81,7 +81,6 @@ public class SpecServiceImpl implements SpecService {
 
     /**
      * 查询所有规格
-     *
      * @return 响应数据
      */
     @Override
@@ -95,7 +94,7 @@ public class SpecServiceImpl implements SpecService {
      *
      * @param page     当前页码
      * @param pageSize 每页大小
-     * @return 响应数据
+     * @return         响应数据
      */
     @Override
     public Result<PageInfo<Spec>> findByPager(Integer page, Integer pageSize) {
@@ -110,7 +109,7 @@ public class SpecServiceImpl implements SpecService {
      * @param spec     规格实体
      * @param page     当前页码
      * @param pageSize 每页大小
-     * @return 响应数据
+     * @return         响应数据
      */
     @Override
     public Result<PageInfo<Spec>> findPagerByParam(Spec spec, Integer page, Integer pageSize) {
@@ -119,6 +118,17 @@ public class SpecServiceImpl implements SpecService {
         Example example = createExample(spec);
         List<Spec> specList = specMapper.selectByExample(example);
         return new Result<>(true,StatusCode.OK,"查询成功", new PageInfo<>(specList));
+    }
+
+    /**
+     * 通过模板id查询规格
+     * @param templateId    模板id
+     * @return              响应数据
+     */
+    @Override
+    public Result<List<Spec>> findByTemplateId(Integer templateId) {
+        if(templateId == null) { return new Result<>(false,StatusCode.ARGERROR,"参数异常"); }
+        return new Result<>(true,StatusCode.OK,"查询成功", specMapper.selectByTemplateId(templateId));
     }
 
     /**

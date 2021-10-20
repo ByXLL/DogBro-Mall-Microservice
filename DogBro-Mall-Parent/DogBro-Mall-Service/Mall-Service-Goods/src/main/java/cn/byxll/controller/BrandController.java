@@ -4,7 +4,6 @@ import cn.byxll.goods.pojo.Brand;
 import cn.byxll.service.impl.BrandServiceImpl;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
-import entity.StatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -82,8 +81,18 @@ public class BrandController {
     /**
      * 删除品牌
      */
-    @DeleteMapping("/{id}")
+    @PostMapping("/delete/{id}")
     public Result<Boolean> delete(@PathVariable("id") Integer id) {
         return brandService.delete(id);
+    }
+
+    /**
+     * 通过分类id查询品牌列表
+     * @param cateId        分类id
+     * @return              响应数据
+     */
+    @GetMapping("/findByCateId/{cateId}")
+    public Result<List<Brand>> findByCateId(@PathVariable("cateId") Integer cateId) {
+        return brandService.findByCateId(cateId);
     }
 }

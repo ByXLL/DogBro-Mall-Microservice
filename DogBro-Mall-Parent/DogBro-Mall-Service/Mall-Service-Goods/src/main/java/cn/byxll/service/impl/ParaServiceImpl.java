@@ -107,6 +107,18 @@ public class ParaServiceImpl implements ParaService {
     }
 
     /**
+     * 通过模板id查询参数
+     *
+     * @param templateId 模板id
+     * @return 响应数据
+     */
+    @Override
+    public Result<List<Para>> findByTemplateId(Integer templateId) {
+        if(templateId == null) { return new Result<>(false,StatusCode.ARGERROR,"参数异常"); }
+        return new Result<>(true,StatusCode.OK,"查询成功", paraMapper.selectByTemplateId(templateId));
+    }
+
+    /**
      * 构建查询条件
      * @param para          参数实体
      * @return              查询条件 example

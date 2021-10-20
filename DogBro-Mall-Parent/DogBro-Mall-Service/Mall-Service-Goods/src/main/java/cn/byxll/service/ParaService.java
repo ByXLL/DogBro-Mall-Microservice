@@ -1,8 +1,11 @@
 package cn.byxll.service;
 
 import cn.byxll.goods.pojo.Para;
+import cn.byxll.goods.pojo.Spec;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
+
+import java.util.List;
 
 /**
  * 参数 service 接口
@@ -53,4 +56,11 @@ public interface ParaService {
      * @return              响应数据
      */
     Result<PageInfo<Para>> findPagerByParam(Para para, Integer page, Integer pageSize);
+
+    /**
+     * 通过模板id查询参数
+     * @param templateId        模板id
+     * @return                  响应数据
+     */
+    Result<List<Para>> findByTemplateId(Integer templateId);
 }

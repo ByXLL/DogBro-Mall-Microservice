@@ -29,3 +29,8 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target
+/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target
+/DogBro-Mall-Parent/DogBro-Mall-Eureka/target
+/DogBro-Mall-Parent/DogBro-Mall-Common-DB/target
+/DogBro-Mall-Parent/DogBro-Mall-Common/target

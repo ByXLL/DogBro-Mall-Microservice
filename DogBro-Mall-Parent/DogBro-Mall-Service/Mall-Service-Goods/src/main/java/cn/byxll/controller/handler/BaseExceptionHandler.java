@@ -2,6 +2,7 @@ package cn.byxll.controller.handler;
 
 import entity.Result;
 import entity.StatusCode;
+import exception.OperationalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -54,6 +55,17 @@ public class BaseExceptionHandler {
     public Result<Object> illegalArgError(Exception e) {
         e.printStackTrace();
         return new Result<>(false, StatusCode.NOTFOUNDERROR, "参数异常---"+e.getLocalizedMessage());
+    }
+
+    /**
+     * service 操作失败异常处理器
+     * @param e     异常
+     * @return      响应数据
+     */
+    @ExceptionHandler(value = { OperationalException.class })
+    public Result<Object> operationalException(Exception e) {
+        e.printStackTrace();
+        return new Result<>(false, StatusCode.ERROR, e.getLocalizedMessage());
     }
 
     /**

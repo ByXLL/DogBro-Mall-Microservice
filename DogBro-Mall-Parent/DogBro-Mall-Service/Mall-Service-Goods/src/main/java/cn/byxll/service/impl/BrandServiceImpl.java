@@ -61,6 +61,16 @@ public class BrandServiceImpl implements BrandService {
     }
 
     /**
+     * 根据商品分类查询品牌
+     * @param categoryId    分类id
+     * @return              响应数据
+     */
+    @Override
+    public Result<List<Brand>> findByCateId(Integer categoryId) {
+        return new Result<>(true, StatusCode.OK, "查询成功", brandMapper.selectByCateId(categoryId));
+    }
+
+    /**
      * 分页查询
      * @param page     当前页面
      * @param pageSize 每页大小

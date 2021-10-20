@@ -60,4 +60,11 @@ public interface SpecService {
      * @return              响应数据
      */
     Result<PageInfo<Spec>> findPagerByParam(Spec spec, Integer page, Integer pageSize);
+
+    /**
+     * 通过模板id查询规格
+     * @param templateId        模板id
+     * @return                  响应数据
+     */
+    Result<List<Spec>> findByTemplateId(Integer templateId);
 }

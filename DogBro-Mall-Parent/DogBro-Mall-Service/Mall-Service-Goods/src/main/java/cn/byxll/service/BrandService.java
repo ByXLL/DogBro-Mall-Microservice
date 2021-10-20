@@ -33,6 +33,13 @@ public interface BrandService {
     Result<List<Brand>> findByEntity(Brand brand);
 
     /**
+     * 根据商品分类查询品牌
+     * @param cateId        分类id
+     * @return              响应数据
+     */
+    Result<List<Brand>> findByCateId(Integer cateId);
+
+    /**
      * 分页查询
      * @param page      当前页面
      * @param pageSize  每页大小

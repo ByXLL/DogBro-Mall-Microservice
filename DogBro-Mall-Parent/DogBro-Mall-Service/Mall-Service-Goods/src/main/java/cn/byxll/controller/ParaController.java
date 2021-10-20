@@ -1,10 +1,13 @@
 package cn.byxll.controller;
 
 import cn.byxll.goods.pojo.Para;
+import cn.byxll.goods.pojo.Spec;
 import cn.byxll.service.impl.ParaServiceImpl;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 参数 控制器
@@ -81,5 +84,15 @@ public class ParaController {
     @PostMapping("/search/{page}/{pageSize}")
     public Result<PageInfo<Para>> findPagerByParam(@RequestBody Para para, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
         return paraService.findPagerByParam(para, page, pageSize);
+    }
+
+    /**
+     * 通过模板id查询参数
+     * @param templateId        模板id
+     * @return                  响应数据
+     */
+    @GetMapping("/findByTemplateId/{templateId}")
+    public Result<List<Para>> findByTemplateId(@PathVariable("templateId") Integer templateId) {
+        return paraService.findByTemplateId(templateId);
     }
 }
