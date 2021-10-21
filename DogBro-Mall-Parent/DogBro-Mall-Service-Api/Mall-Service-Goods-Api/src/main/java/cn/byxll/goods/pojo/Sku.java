@@ -11,6 +11,10 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * sku 实体信息
+ * @author By-Lin
+ */
 @ApiModel(description = "Sku",value = "Sku")
 @Table(name="tb_sku")
 public class Sku implements Serializable{
