@@ -1,6 +1,8 @@
 package cn.byxll.service;
 
 import cn.byxll.goods.dto.Goods;
+import cn.byxll.goods.pojo.Spu;
+import com.github.pagehelper.PageInfo;
 import entity.Result;
 
 import java.util.List;
@@ -17,15 +19,6 @@ public interface GoodsService {
      * @return          响应数据
      */
     Result<Boolean> saveGoods(Goods goods);
-
-
-    /**
-     * 根据spuId 查询商品信息
-     * @param spuId     spuId
-     * @return          响应数据
-     */
-    Result<Goods> findBySpuId(Long spuId);
-
 
     /**
      * 根据spuId 审核商品
@@ -46,7 +39,7 @@ public interface GoodsService {
      * @param spuIds     spuId集合
      * @return           响应数据
      */
-    Result<Boolean> pullBySpuIds(List<Long> spuIds);
+    Result<Boolean> pullBySpuIds(Long[] spuIds);
 
 
     /**
@@ -61,5 +54,37 @@ public interface GoodsService {
      * @param spuIds     spuId集合
      * @return           响应数据
      */
-    Result<Boolean> putBySpuIds(List<Long> spuIds);
+    Result<Boolean> putBySpuIds(Long[] spuIds);
+
+    /**
+     * 根据spuId 查询商品信息
+     * @param spuId     spuId
+     * @return          响应数据
+     */
+    Result<Goods> findBySpuId(Long spuId);
+
+    /**
+     * Spu分页查询
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<Spu>> findByPager(Integer page, Integer pageSize);
+
+    /**
+     * Spu多条件分页查询
+     * @param spu      Spu 实体
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<Spu>> findPagerByParam(Spu spu, Integer page, Integer pageSize);
+
+
+    /**
+     * Spu多条件搜索方法
+     * @param spu      实体
+     * @return         响应数据
+     */
+    Result<List<Spu>> findListByParam(Spu spu);
 }

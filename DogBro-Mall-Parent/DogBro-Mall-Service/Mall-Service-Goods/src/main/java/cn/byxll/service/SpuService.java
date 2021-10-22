@@ -40,35 +40,4 @@ public interface SpuService {
      */
     Result<Spu> findById(String id);
 
-    /**
-     * Spu分页查询
-     * @param page          当前页码
-     * @param pageSize      每页大小
-     * @return              响应数据
-     */
-    Result<PageInfo<Spu>> findByPager(Integer page, Integer pageSize);
-
-    /**
-     * Spu多条件分页查询
-     * @param spu      Spu 实体
-     * @param page          当前页码
-     * @param pageSize      每页大小
-     * @return              响应数据
-     */
-    Result<PageInfo<Spu>> findPagerByParam(Spu spu, Integer page, Integer pageSize);
-
-
-    /**
-     * Spu多条件搜索方法
-     * @param spu      实体
-     * @return              响应数据
-     */
-    Result<List<Spu>> findListByParam(Spu spu);
-
-    /**
-     * 查询所有Spu
-     * @return      响应数据
-     */
-    Result<List<Spu>> findAll();
-
 }

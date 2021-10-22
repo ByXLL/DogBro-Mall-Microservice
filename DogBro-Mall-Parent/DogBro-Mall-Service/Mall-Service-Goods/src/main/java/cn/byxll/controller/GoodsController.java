@@ -1,7 +1,9 @@
 package cn.byxll.controller;
 
 import cn.byxll.goods.dto.Goods;
+import cn.byxll.goods.pojo.Spu;
 import cn.byxll.service.impl.GoodsServiceImpl;
+import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,16 +35,6 @@ public class GoodsController {
     }
 
     /**
-     * 通过spuId查询商品信息
-     * @param spuId     spuId
-     * @return          响应信息
-     */
-    @GetMapping("/search/{spuId}")
-    public Result<Goods> findBySpuId(@PathVariable("spuId") Long spuId) {
-        return goodsService.findBySpuId(spuId);
-    }
-
-    /**
      * 通过spuId审核商品
      * @param spuId     spuId
      * @return          响应信息
@@ -67,7 +59,7 @@ public class GoodsController {
      * @return          响应数据
      */
     @PostMapping("/pullBySpuIds")
-    public Result<Boolean> pullBySpuIds(@RequestBody List<Long> spuIds) {
+    public Result<Boolean> pullBySpuIds(@RequestBody Long[] spuIds) {
         return goodsService.pullBySpuIds(spuIds);
     }
 
@@ -87,8 +79,50 @@ public class GoodsController {
      * @return          响应数据
      */
     @PostMapping("/putBySpuIds")
-    public Result<Boolean> putBySpuIds(@RequestBody List<Long> spuIds) {
+    public Result<Boolean> putBySpuIds(@RequestBody Long[] spuIds) {
         return goodsService.putBySpuIds(spuIds);
     }
 
+    /**
+     * 通过spuId查询商品信息
+     * @param spuId     spuId
+     * @return          响应信息
+     */
+    @GetMapping("/search/{spuId}")
+    public Result<Goods> findBySpuId(@PathVariable("spuId") Long spuId) {
+        return goodsService.findBySpuId(spuId);
+    }
+
+    /**
+     * 分页查询商品列表
+     * @param page      当前页码
+     * @param pageSize  每页大小
+     * @return          响应数据
+     */
+    @GetMapping("/search/{page}/{pageSize}")
+    public Result<PageInfo<Spu>> findByPager(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
+        return goodsService.findByPager(page, pageSize);
+    }
+
+    /**
+     * 按条件分页查询商品列表
+     * @param spu       spu实体
+     * @param page      当前页码
+     * @param pageSize  每页大小
+     * @return          响应数据
+     */
+    @PostMapping("/search/{page}/{pageSize}")
+    public Result<PageInfo<Spu>> findPagerByParam(@RequestBody Spu spu, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
+        return goodsService.findPagerByParam(spu, page, pageSize);
+    }
+
+    /**
+     * 条件查询
+     * @param spu       spu实体
+     * @return          响应数据
+     */
+    @PostMapping("/search")
+    public Result<List<Spu>> findListByParam(@RequestBody Spu spu) {
+        return goodsService.findListByParam(spu);
+    }
 }
