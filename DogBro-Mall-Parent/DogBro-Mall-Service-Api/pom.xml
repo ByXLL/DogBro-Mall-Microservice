@@ -14,6 +14,7 @@
 
     <modules>
         <module>Mall-Service-Goods-Api</module>
+        <module>Mall-Service-Search-Api</module>
     </modules>
 
     <properties>
@@ -41,7 +42,12 @@
             <scope>compile</scope>
         </dependency>
 
-
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-openfeign-core -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-openfeign-core</artifactId>
+            <version>2.2.10.RELEASE</version>
+        </dependency>
     </dependencies>
 
 </project>
