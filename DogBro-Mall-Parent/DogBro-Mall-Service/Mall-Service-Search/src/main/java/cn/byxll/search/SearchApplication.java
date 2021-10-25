@@ -9,6 +9,8 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 /**
  * Mall-Search es搜索微服务启动类
+ * EnableFeignClients       声明feign的路径
+ * EnableElasticsearchRepositories      声明es mapper的路径
  * @author By-Lin
  */
 @EnableEurekaClient

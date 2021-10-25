@@ -2,8 +2,6 @@ package cn.byxll.search.dao;
 
 
 import cn.byxll.search.SkuInfo;
-import com.google.common.annotations.Beta;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 

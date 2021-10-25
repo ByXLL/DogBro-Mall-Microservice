@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author By-Lin
  */
-@Document(indexName = "skuinfo")
+@Document(indexName = "skuinfo",type = "docs")
 public class SkuInfo {
     /**
      * 商品id，同时也是商品编号

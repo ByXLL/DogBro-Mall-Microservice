@@ -1,12 +1,12 @@
 package cn.byxll.search.controller;
 
+import cn.byxll.search.service.SkuService;
 import cn.byxll.search.service.impl.SkuServiceImpl;
 import entity.Result;
 import entity.StatusCode;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * es 微服务暴露出去的控制器
@@ -26,9 +26,17 @@ public class SkuController {
      * 导入数据
      * @return      响应结果
      */
-    @GetMapping("/import")
-    public Result<Boolean> search(){
-        skuService.importSkuData();
-        return new Result<>(true, StatusCode.OK,"导入数据到索引库中成功！");
+    @RequestMapping("/import")
+    public Result<Boolean> importSkuData(){
+        return skuService.importSkuData();
+    }
+
+    /**
+     * 查询
+     * @return      响应结果
+     */
+    @RequestMapping("/")
+    public Result<Map<String,Object>> search(@RequestParam Map<String, String> searchMap){
+        return skuService.search(searchMap);
     }
 }
