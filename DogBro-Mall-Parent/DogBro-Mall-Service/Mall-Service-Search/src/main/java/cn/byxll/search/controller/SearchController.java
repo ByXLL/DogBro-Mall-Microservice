@@ -1,5 +1,6 @@
 package cn.byxll.search.controller;
 
+import cn.byxll.goods.dto.SearchParam;
 import cn.byxll.search.service.SkuService;
 import cn.byxll.search.service.impl.SkuServiceImpl;
 import entity.Result;
@@ -15,10 +16,10 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/search")
-public class SkuController {
+public class SearchController {
     private final SkuServiceImpl skuService;
 
-    public SkuController(SkuServiceImpl skuService) {
+    public SearchController(SkuServiceImpl skuService) {
         this.skuService = skuService;
     }
 
@@ -36,7 +37,7 @@ public class SkuController {
      * @return      响应结果
      */
     @RequestMapping("/")
-    public Result<Map<String,Object>> search(@RequestParam Map<String, String> searchMap){
+    public Result<Map<String,Object>> search(SearchParam searchMap){
         return skuService.search(searchMap);
     }
 }

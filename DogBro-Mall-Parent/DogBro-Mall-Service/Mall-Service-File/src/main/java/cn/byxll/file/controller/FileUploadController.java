@@ -1,4 +1,4 @@
-package cn.byxll.file.goods.controller;
+package cn.byxll.file.controller;
 
 import cn.byxll.file.entity.FastDFSFile;
 import cn.byxll.file.util.FastDFSUtil;

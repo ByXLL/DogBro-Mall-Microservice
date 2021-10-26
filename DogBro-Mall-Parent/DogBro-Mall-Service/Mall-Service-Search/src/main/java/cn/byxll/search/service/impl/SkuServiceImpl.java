@@ -22,10 +22,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * SkuService 接口实现类
@@ -80,30 +77,39 @@ public class SkuServiceImpl implements SkuService {
      * @return          响应数据
      */
     @Override
-    public Result<Map<String, Object>> search(Map<String,String> searchMap) {
+    public Result<Map<String, Object>> search(SearchParam searchMap) {
         // 构建搜索对象
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
 
         if(searchMap != null) {
             // 根据关键词搜索
-            if(StringUtils.isNotBlank(searchMap.get("keyWords"))) {
+            if(StringUtils.isNotBlank(searchMap.getKeywords())) {
                 // field 对应的是es 数据库列名
-                queryBuilder.withQuery(QueryBuilders.queryStringQuery(searchMap.get("keyWords")).field("name"));
+                queryBuilder.withQuery(QueryBuilders.queryStringQuery(searchMap.getKeywords()).field("name"));
             }
-            // 分页参数
-            queryBuilder.withPageable(PageRequest.of(Integer.parseInt(searchMap.get("page")),
-                    Integer.parseInt(searchMap.get("pageSize"))));
-
-            /*
-             * 分组查询分类集合
-             * addAggregation 添加一个聚合操作
-             * terms    相当于sql的 as 取别名
-             * field    表示根据哪一个域进行分组
-             */
-            queryBuilder.addAggregation(AggregationBuilders.terms("skuCategory").field("categoryName"));
+            if(searchMap.getPage() != null || searchMap.getPageSize() != null) {
+                // 分页参数
+                queryBuilder.withPageable(PageRequest.of(searchMap.getPage(), searchMap.getPageSize()));
+            }
         }
+        /*
+         * 添加 分类分组查询条件
+         * addAggregation 添加一个聚合操作
+         * terms    相当于sql的 as 取别名
+         * field    表示根据哪一个域进行分组
+         */
+        queryBuilder.addAggregation(AggregationBuilders.terms("skuCategory").field("categoryName"));
 
+        /*
+         * 添加 商品品牌分类查询条件
+         */
+        queryBuilder.addAggregation(AggregationBuilders.terms("skuBrand").field("brandName"));
 
+        /*
+         * 添加 商品规格名分组查询条件
+         * 获取商品规格名
+         */
+        queryBuilder.addAggregation(AggregationBuilders.terms("skuSpec").field("spec.keyword"));
 
         /*
          *  使用 ElasticsearchTemplate 执行搜索
@@ -121,26 +127,127 @@ public class SkuServiceImpl implements SkuService {
         List<SkuInfo> content = page.getContent();
 
         /*
-         * 获取分组数据
+         * 获取分类数据
          * page.getAggregations()       获取的是集合 可以根据多个域进行分组
          * .get("skuCategory")          获取指定域 也就是某一个字段的集合数据  [“手机”，“家电”]
          */
-        StringTerms stringTerms = page.getAggregations().get("skuCategory");
+        StringTerms skuCategoryStrT = page.getAggregations().get("skuCategory");
+        List<String> categoryList = getStringsCategoryList(skuCategoryStrT);
 
-        List<String> categoryNameList = new ArrayList<>();
-        for (StringTerms.Bucket bucket : stringTerms.getBuckets()) {
-            // 其中的某一个数据     "手机"
-            String categoryName = bucket.getKeyAsString();
-            categoryNameList.add(categoryName);
-        }
+
+        /*
+         * 获取品牌数据
+         * [“华为”，“小米”]
+         */
+        StringTerms skuBrandStrT = page.getAggregations().get("skuBrand");
+        List<String> brandList = getStringsBrandList(skuBrandStrT);
+
+        /*
+         * 获取规格数据
+         * [{"颜色":"红色","内存":"128G"}，{"颜色":"红色","内存":"256G"}]
+         */
+        StringTerms skuSpecStrT = page.getAggregations().get("skuSpec");
+        Map<String, Set<String>> specList = getStringsSpecList(skuSpecStrT);
+
+
+
 
         // 封装一个Map存储
         Map<String, Object> resultMap = new HashMap<>(16);
         resultMap.put("row",content);
         resultMap.put("total",totalElements);
         resultMap.put("totalPages",totalPages);
-        resultMap.put("categoryList",categoryNameList);
+        resultMap.put("categoryList",categoryList);
+        resultMap.put("brandList",brandList);
+        resultMap.put("specList",specList);
 
         return new Result<>(true,StatusCode.OK,"查询成功",resultMap);
     }
+
+    /**
+     * 将 商品分类数据 StringTerms 转换成字符串数组
+     * @param stringTerms       商品分类聚合结果
+     * @return                  分类字符串数组
+     */
+    private List<String> getStringsCategoryList(StringTerms stringTerms) {
+        List<String> categoryNameList = new ArrayList<>();
+        for (StringTerms.Bucket bucket : stringTerms.getBuckets()) {
+            // 其中的某一个数据     "手机"
+            String categoryName = bucket.getKeyAsString();
+            categoryNameList.add(categoryName);
+        }
+        return categoryNameList;
+    }
+
+
+    /**
+     * 将 品牌数据 StringTerms 转换成字符串数组
+     * @param stringTerms       品牌聚合结果
+     * @return                  品牌字符串数组
+     */
+    private List<String> getStringsBrandList(StringTerms stringTerms) {
+        List<String> brandNameList = new ArrayList<>();
+        for (StringTerms.Bucket bucket : stringTerms.getBuckets()) {
+            // 其中的某一个数据     "华为"、"苹果"
+            String brandName = bucket.getKeyAsString();
+            brandNameList.add(brandName);
+        }
+        return brandNameList;
+    }
+
+    /**
+     * 将 规格数据 StringTerms 转换成字符串数组
+     * @param stringTerms       规格聚合结果
+     * @return                  规格map对象
+     */
+    private Map<String, Set<String>> getStringsSpecList(StringTerms stringTerms) {
+        /*
+         * 当前 stringTerms 格式为以下的json数据
+         * [{"颜色":"红色","内存":"128G"}，{"颜色":"红色","内存":"256G"}]
+         */
+        List<String> specList = new ArrayList<>();
+        for (StringTerms.Bucket bucket : stringTerms.getBuckets()) {
+            String specName = bucket.getKeyAsString();
+            specList.add(specName);
+        }
+        // 合并后的map对象
+        Map<String, Set<String>> allSpec = new HashMap<>();
+        // 1.循环specList
+        for (String spec : specList) {
+            /*
+             * 2、将每一个Json字符串转换成Map
+             * {"颜色":"红色","内存":"128G"}
+             */
+            Map<String,String> itemMap = JSON.parseObject(spec,Map.class);
+
+            // 3、循环所有的map 将每一个Map对象合并成一个Map<String,Set<String>>
+            for (Map.Entry<String, String> entry : itemMap.entrySet()) {
+                /*
+                 * 4、取出当前Map，并获取对应的Key，以及对应的value
+                 * 颜色
+                 */
+                String key = entry.getKey();
+                // 规格值 红色
+                String value = entry.getValue();
+
+                /*
+                 * 将当前循环的数据合并到一个Map<String, Set<String>中
+                 * 需要先获取当前规格对应的set集合数据
+                 * 否则将会替换原来的存入的值，变成了替换而不是插入
+                 * {"颜色":["红色"，"银色"]}
+                 */
+                Set<String> specSet = allSpec.get(key);
+                if(specSet == null) {
+                    specSet = new HashSet<>();
+                }
+                // 红色
+                specSet.add(value);
+                // {"颜色":["红色"，"银色"]}
+                allSpec.put(key,specSet);
+            }
+        }
+
+        return allSpec;
+    }
 }
+
