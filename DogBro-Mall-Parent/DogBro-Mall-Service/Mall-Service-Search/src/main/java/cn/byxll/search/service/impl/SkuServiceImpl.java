@@ -15,6 +15,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
@@ -88,8 +90,25 @@ public class SkuServiceImpl implements SkuService {
                 queryBuilder.withQuery(QueryBuilders.queryStringQuery(searchMap.getKeywords()).field("name"));
             }
             if(searchMap.getPage() != null || searchMap.getPageSize() != null) {
+                Integer pageIndex = searchMap.getPage() == null ? 0 : Math.max((searchMap.getPage() - 1), 0);
+                Integer pageSize = searchMap.getPageSize() == null ? 20 : searchMap.getPageSize();
                 // 分页参数
-                queryBuilder.withPageable(PageRequest.of(searchMap.getPage(), searchMap.getPageSize()));
+                queryBuilder.withPageable(PageRequest.of(pageIndex,pageSize));
+            }
+            // 价格区间搜索
+            if(searchMap.getMinPrice() != null) {
+                // 大于
+                queryBuilder.withFilter(QueryBuilders.rangeQuery("price").gt(searchMap.getMinPrice()));
+            }
+            if(searchMap.getMaxPrice() != null) {
+                // 小于
+                queryBuilder.withFilter(QueryBuilders.rangeQuery("price").lte(searchMap.getMaxPrice()));
+            }            /* 获取排序 */
+            String sortField = searchMap.getSortField();
+            String sortRule = searchMap.getSortRule();
+            if(StringUtils.isNotBlank(sortField) && StringUtils.isNotBlank(sortRule)) {
+                // 自动通过回传的排序条件
+                queryBuilder.withSort(new FieldSortBuilder(sortField).order(SortOrder.valueOf(sortRule)));
             }
         }
         /*
