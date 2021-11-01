@@ -1,4 +1,4 @@
-package cn.byxll.search;
+package cn.byxll.search.pojo;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;

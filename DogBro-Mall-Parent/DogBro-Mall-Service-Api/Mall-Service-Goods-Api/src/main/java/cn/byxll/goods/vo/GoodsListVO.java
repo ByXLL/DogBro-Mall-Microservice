@@ -1,35 +1,31 @@
 package cn.byxll.goods.vo;
 
-import cn.byxll.search.SkuInfo;
+import cn.byxll.search.pojo.SkuInfo;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 商品搜索页 商品列表视图模型
  * @author By-Lin
  */
 public class GoodsListVO implements Serializable {
-    private Integer total;
+    private Long total;
     private Integer totalPages;
+    private Integer pageNum;
+    private Integer pageSize;
     private List<String> categoryList;
-    private List<SkuInfo> row;
+    private List<String> brandList;
+    private Map<String, Set<String>> specList;
+    private List<SkuInfo> rows;
 
-    public GoodsListVO() {
-    }
-
-    public GoodsListVO(Integer total, Integer totalPages, List<String> categoryList, List<SkuInfo> row) {
-        this.total = total;
-        this.totalPages = totalPages;
-        this.categoryList = categoryList;
-        this.row = row;
-    }
-
-    public Integer getTotal() {
+    public Long getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(Long total) {
         this.total = total;
     }
 
@@ -49,11 +45,57 @@ public class GoodsListVO implements Serializable {
         this.categoryList = categoryList;
     }
 
-    public List<SkuInfo> getRow() {
-        return row;
+    public List<SkuInfo> getRows() {
+        return rows;
     }
 
-    public void setRow(List<SkuInfo> row) {
-        this.row = row;
+    public void setRows(List<SkuInfo> rows) {
+        this.rows = rows;
+    }
+
+    public List<String> getBrandList() {
+        return brandList;
+    }
+
+    public void setBrandList(List<String> brandList) {
+        this.brandList = brandList;
+    }
+
+    public Map<String, Set<String>> getSpecList() {
+        return specList;
+    }
+
+    public void setSpecList(Map<String, Set<String>> specList) {
+        this.specList = specList;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    @Override
+    public String toString() {
+        return "GoodsListVO{" +
+                "total=" + total +
+                ", totalPages=" + totalPages +
+                ", pageNum=" + pageNum +
+                ", pageSize=" + pageSize +
+                ", categoryList=" + categoryList +
+                ", brandList=" + brandList +
+                ", specList=" + specList +
+                ", rows=" + rows +
+                '}';
     }
 }

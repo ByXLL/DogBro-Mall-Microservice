@@ -2,6 +2,7 @@ package cn.byxll.goods.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * 商品搜索参数 dto
@@ -11,23 +12,13 @@ public class SearchParam implements Serializable {
     private Integer page;
     private Integer pageSize;
     private String keywords;
+    private String category;
+    private String brand;
+    private String specs;
     private Integer minPrice;
     private Integer maxPrice;
     private String sortField;
     private String sortRule;
-
-    public SearchParam() {
-    }
-
-    public SearchParam(Integer page, Integer pageSize, String keywords, Integer minPrice, Integer maxPrice, String sortField, String sortRule) {
-        this.page = page;
-        this.pageSize = pageSize;
-        this.keywords = keywords;
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
-        this.sortField = sortField;
-        this.sortRule = sortRule;
-    }
 
     public Integer getPage() {
         return page;
@@ -83,5 +74,29 @@ public class SearchParam implements Serializable {
 
     public void setSortRule(String sortRule) {
         this.sortRule = sortRule;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getSpecs() {
+        return specs;
+    }
+
+    public void setSpecs(String specs) {
+        this.specs = specs;
     }
 }

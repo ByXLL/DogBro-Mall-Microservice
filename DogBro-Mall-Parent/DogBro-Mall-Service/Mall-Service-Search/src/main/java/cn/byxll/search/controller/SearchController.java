@@ -1,6 +1,7 @@
 package cn.byxll.search.controller;
 
 import cn.byxll.goods.dto.SearchParam;
+import cn.byxll.goods.vo.GoodsListVO;
 import cn.byxll.search.service.SkuService;
 import cn.byxll.search.service.impl.SkuServiceImpl;
 import entity.Result;
@@ -34,10 +35,11 @@ public class SearchController {
 
     /**
      * 查询
-     * @return      响应结果
+     * @param searchMap        商品查询参数dto
+     * @return                 响应结果
      */
     @RequestMapping("/")
-    public Result<Map<String,Object>> search(SearchParam searchMap){
+    public Result<GoodsListVO> search(SearchParam searchMap){
         return skuService.search(searchMap);
     }
 }

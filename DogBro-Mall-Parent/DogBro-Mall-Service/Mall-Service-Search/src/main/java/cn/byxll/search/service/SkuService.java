@@ -1,6 +1,7 @@
 package cn.byxll.search.service;
 
 import cn.byxll.goods.dto.SearchParam;
+import cn.byxll.goods.vo.GoodsListVO;
 import entity.Result;
 
 import java.util.Map;
@@ -24,6 +25,6 @@ public interface SkuService {
      * @param searchMap     查询对象map
      * @return              响应数据
      */
-    Result<Map<String,Object>> search(SearchParam searchMap);
+    Result<GoodsListVO> search(SearchParam searchMap);
 
 }

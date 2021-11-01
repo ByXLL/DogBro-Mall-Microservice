@@ -1,7 +1,7 @@
 package cn.byxll.search.dao;
 
 
-import cn.byxll.search.SkuInfo;
+import cn.byxll.search.pojo.SkuInfo;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
