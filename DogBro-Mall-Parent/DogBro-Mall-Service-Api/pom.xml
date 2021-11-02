@@ -15,6 +15,7 @@
     <modules>
         <module>Mall-Service-Goods-Api</module>
         <module>Mall-Service-Search-Api</module>
+        <module>Mall-Service-User-Api</module>
     </modules>
 
     <properties>
