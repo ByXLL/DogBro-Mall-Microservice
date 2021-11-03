@@ -125,7 +125,7 @@ public class AddressServiceImpl implements AddressService {
      * @return          响应数据
      */
     @Override
-    public Result<PageInfo<Address>> findByPagerParam(Address address, Integer page, Integer pageSize) {
+    public Result<PageInfo<Address>> findPagerByParam(Address address, Integer page, Integer pageSize) {
         if(address == null || page == null || pageSize == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常", null); }
         //分页
         PageHelper.startPage(page,pageSize);
@@ -141,7 +141,7 @@ public class AddressServiceImpl implements AddressService {
      * @param address       实体
      * @return              查询对象
      */
-    public Example createExample(Address address){
+    private Example createExample(Address address){
         Example example=new Example(Address.class);
         Example.Criteria criteria = example.createCriteria();
         if(address!=null){

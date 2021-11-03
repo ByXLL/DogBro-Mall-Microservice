@@ -1,127 +1,110 @@
 package cn.byxll.user.controller;
 
-import com.changgou.user.pojo.UndoLog;
-import com.changgou.user.service.UndoLogService;
+import cn.byxll.user.pojo.UndoLog;
+import cn.byxll.user.service.impl.UndoLogServiceImpl;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
-import entity.StatusCode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/****
- * @Author:admin
- * @Description:
- * @Date 2019/6/14 0:18
- *****/
+/**
+ * UndoLog 控制器类
+ * @author By-Lin
+ */
 
+@CrossOrigin
 @RestController
 @RequestMapping("/undoLog")
-@CrossOrigin
 public class UndoLogController {
 
-    @Autowired
-    private UndoLogService undoLogService;
+    private final UndoLogServiceImpl undoLogService;
 
-    /***
-     * UndoLog分页条件搜索实现
-     * @param undoLog
-     * @param page
-     * @param size
-     * @return
-     */
-    @PostMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@RequestBody(required = false)  UndoLog undoLog, @PathVariable  int page, @PathVariable  int size){
-        //调用UndoLogService实现分页条件查询UndoLog
-        PageInfo<UndoLog> pageInfo = undoLogService.findPage(undoLog, page, size);
-        return new Result(true,StatusCode.OK,"查询成功",pageInfo);
+    public UndoLogController(UndoLogServiceImpl undoLogService) {
+        this.undoLogService = undoLogService;
     }
 
-    /***
-     * UndoLog分页搜索实现
-     * @param page:当前页
-     * @param size:每页显示多少条
-     * @return
-     */
-    @GetMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
-        //调用UndoLogService实现分页查询UndoLog
-        PageInfo<UndoLog> pageInfo = undoLogService.findPage(page, size);
-        return new Result<PageInfo>(true,StatusCode.OK,"查询成功",pageInfo);
-    }
-
-    /***
-     * 多条件搜索品牌数据
-     * @param undoLog
-     * @return
-     */
-    @PostMapping(value = "/search" )
-    public Result<List<UndoLog>> findList(@RequestBody(required = false)  UndoLog undoLog){
-        //调用UndoLogService实现条件查询UndoLog
-        List<UndoLog> list = undoLogService.findList(undoLog);
-        return new Result<List<UndoLog>>(true,StatusCode.OK,"查询成功",list);
-    }
-
-    /***
-     * 根据ID删除品牌数据
-     * @param id
-     * @return
-     */
-    @DeleteMapping(value = "/{id}" )
-    public Result delete(@PathVariable Long id){
-        //调用UndoLogService实现根据主键删除
-        undoLogService.delete(id);
-        return new Result(true,StatusCode.OK,"删除成功");
-    }
-
-    /***
-     * 修改UndoLog数据
-     * @param undoLog
-     * @param id
-     * @return
-     */
-    @PutMapping(value="/{id}")
-    public Result update(@RequestBody  UndoLog undoLog,@PathVariable Long id){
-        //设置主键值
-        undoLog.setId(id);
-        //调用UndoLogService实现修改UndoLog
-        undoLogService.update(undoLog);
-        return new Result(true,StatusCode.OK,"修改成功");
-    }
-
-    /***
+    /**
      * 新增UndoLog数据
-     * @param undoLog
-     * @return
+     * @param undoLog      UndoLog实体
+     * @return              响应数据
      */
-    @PostMapping
-    public Result add(@RequestBody   UndoLog undoLog){
-        //调用UndoLogService实现添加UndoLog
-        undoLogService.add(undoLog);
-        return new Result(true,StatusCode.OK,"添加成功");
+    @PostMapping("/add")
+    public Result<Boolean> add(@RequestBody UndoLog undoLog){
+        return undoLogService.add(undoLog);
     }
 
-    /***
+    /**
+     * 根据ID删除UndoLog数据
+     * @param id        主键
+     * @return          响应数据
+     */
+    @PostMapping("/delete/{id}" )
+    public Result<Boolean> delete(@PathVariable("id") Long id){
+        return undoLogService.delete(id);
+    }
+
+    /**
+     * 修改UndoLog数据
+     * @param undoLog      UndoLog实体
+     * @return              响应数据
+     */
+    @PostMapping("/update")
+    public Result<Boolean> update(@RequestBody UndoLog undoLog){
+        return undoLogService.update(undoLog);
+    }
+
+    /**
      * 根据ID查询UndoLog数据
-     * @param id
-     * @return
+     * @param id        主键id
+     * @return          响应数据
      */
     @GetMapping("/{id}")
-    public Result<UndoLog> findById(@PathVariable Long id){
-        //调用UndoLogService实现根据主键查询UndoLog
-        UndoLog undoLog = undoLogService.findById(id);
-        return new Result<UndoLog>(true,StatusCode.OK,"查询成功",undoLog);
+    public Result<UndoLog> findById(@PathVariable("id") Long id){
+        return undoLogService.findById(id);
     }
 
-    /***
+    /**
      * 查询UndoLog全部数据
-     * @return
+     * @return          响应数据
      */
-    @GetMapping
+    @GetMapping("/")
     public Result<List<UndoLog>> findAll(){
-        //调用UndoLogService实现查询所有UndoLog
-        List<UndoLog> list = undoLogService.findAll();
-        return new Result<List<UndoLog>>(true, StatusCode.OK,"查询成功",list) ;
+        return undoLogService.findAll();
     }
+
+    /**
+     * 多条件搜索品牌数据
+     * @param undoLog      UndoLog实体
+     * @return              响应数据
+     */
+    @PostMapping("/search")
+    public Result<List<UndoLog>> findList(@RequestBody UndoLog undoLog){
+        return undoLogService.findList(undoLog);
+    }
+
+    /**
+     * UndoLog分页搜索实现
+     * @param page              当前页码
+     * @param pageSize          每页大小
+     * @return                  响应数据
+     */
+    @GetMapping(value = "/search/{page}/{pageSize}" )
+    public Result<PageInfo<UndoLog>> findByPager(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize){
+        return undoLogService.findByPager(page, pageSize);
+    }
+
+
+    /**
+     * UndoLog分页条件搜索实现
+     * @param undoLog          UndoLog实体
+     * @param page              当前页码
+     * @param pageSize          每页大小
+     * @return                  响应数据
+     */
+    @PostMapping(value = "/search/{page}/{pageSize}" )
+    public Result<PageInfo<UndoLog>> findPagerByParam(@RequestBody UndoLog undoLog, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize){
+        return undoLogService.findPagerByParam(undoLog, page, pageSize);
+    }
+
 }

@@ -28,6 +28,19 @@ spring:
                 key-resolver: "#{@ipKeyResolver}"     # 用户唯一标识符 在启动类中声明
                 redis-rate-limiter.replenishRate: 1   # 每秒只允许一个请求
                 redis-rate-limiter.burstCapacity: 4    # 允许并发的请求【宽限的个数】
+#        - id: mall_user_route            # 唯一标识符
+#            #          uri: http://localhost:18081     # 指定要去的服务的路由
+#            uri: lb://user                 # 使用LoadBalancerClient  实现负载均衡，后面是微服务的name
+#            predicates: # 路由断言，路由规则配置
+#              #            - Host=www.test.com**    # 当用户请求这个地址的时候，所有请求转交给http://localhost:18081去处理
+#              - Path=/api/user/**              # 所有以/api/brand/开始的请求，都路由到http://localhost:18081微服务
+#            filters:
+#              - StripPrefix=1               # 将请求路径中的第一个路径去掉,请求路径以/区分，一个/代表一个路径
+#              - name: RequestRateLimiter    #请求数限流 名字不能随便写 ，使用默认的facatory
+#                args:
+#                  key-resolver: "#{@ipKeyResolver}"     # 用户唯一标识符 在启动类中声明
+#                  redis-rate-limiter.replenishRate: 1   # 每秒只允许一个请求
+#                  redis-rate-limiter.burstCapacity: 4    # 允许并发的请求【宽限的个数】
 eureka:
   client:
     service-url:

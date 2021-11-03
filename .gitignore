@@ -3,7 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-!**/target/
+**/target/
+**/target/**
 
 ### STS ###
 .apt_generated
@@ -29,15 +30,3 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Goods/target
-/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-File/target
-/DogBro-Mall-Parent/DogBro-Mall-Eureka/target
-/DogBro-Mall-Parent/DogBro-Mall-Common-DB/target
-/DogBro-Mall-Parent/DogBro-Mall-Common/target
-/DogBro-Mall-Parent/DogBro-Mall-Service-Api/Mall-Service-Goods-Api/target
-/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Search/target
-/DogBro-Mall-Parent/DogBro-Mall-Service-Api/Mall-Service-Search-Api/target
-/DogBro-Mall-Parent/DogBro-Mall-Service/Mall-Service-Canal/target
-/DogBro-Mall-Parent/DogBro-Mall-Web/Mall-Web-Search/target
-/DogBro-Mall-Parent/DogBro-Mall-Gateway/Mall-Gateway-Web/target
-/DogBro-Mall-Parent/DogBro-Mall-Service-Api/Mall-Service-User-Api/target

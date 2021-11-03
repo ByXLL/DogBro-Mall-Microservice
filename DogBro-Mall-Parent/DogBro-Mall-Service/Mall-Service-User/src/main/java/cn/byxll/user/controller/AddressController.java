@@ -39,7 +39,7 @@ public class AddressController {
      * @param id        主键
      * @return          响应数据
      */
-    @PostMapping(value = "/delete/{id}")
+    @PostMapping("/delete/{id}")
     public Result<Boolean> delete(@PathVariable Integer id){
         return addressService.delete(id);
     }
@@ -49,7 +49,7 @@ public class AddressController {
      * @param address       地址实体
      * @return              响应数据
      */
-    @PostMapping(value="/update")
+    @PostMapping("/update")
     public Result<Boolean> update(@RequestBody Address address){
         return addressService.update(address);
     }
@@ -89,7 +89,7 @@ public class AddressController {
      * @param pageSize      每页大小
      * @return              响应数据
      */
-    @GetMapping(value = "/search/{page}/{pageSize}")
+    @GetMapping("/search/{page}/{pageSize}")
     public Result<PageInfo<Address>> findByPager(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
         return addressService.findByPager(page,pageSize);
     }
@@ -101,8 +101,8 @@ public class AddressController {
      * @param pageSize      每页大小
      * @return              响应数据
      */
-    @PostMapping(value = "/search/{page}/{pageSize}" )
+    @PostMapping("/search/{page}/{pageSize}" )
     public Result<PageInfo<Address>> findByPagerParam(@RequestBody Address address, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        return addressService.findByPagerParam(address, page, pageSize);
+        return addressService.findPagerByParam(address, page, pageSize);
     }
 }

@@ -70,5 +70,5 @@ public interface AddressService {
      * @param pageSize  每页大小
      * @return          响应数据
      */
-    Result<PageInfo<Address>> findByPagerParam(Address address, Integer page, Integer pageSize);
+    Result<PageInfo<Address>> findPagerByParam(Address address, Integer page, Integer pageSize);
 }

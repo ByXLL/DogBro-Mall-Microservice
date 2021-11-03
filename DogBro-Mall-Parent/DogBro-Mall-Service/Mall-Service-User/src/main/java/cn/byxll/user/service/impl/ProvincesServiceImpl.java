@@ -1,138 +1,159 @@
 package cn.byxll.user.service.impl;
 
-import com.changgou.user.dao.ProvincesMapper;
-import com.changgou.user.pojo.Provinces;
-import com.changgou.user.service.ProvincesService;
+import cn.byxll.user.dao.ProvincesMapper;
+import cn.byxll.user.pojo.Provinces;
+import cn.byxll.user.service.ProvincesService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import entity.Result;
+import entity.StatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
-/****
- * @Author:admin
- * @Description:Provinces业务层接口实现类
- * @Date 2019/6/14 0:16
- *****/
+/**
+ * Provinces业务层接口实现类
+ * @author By-Lin
+ */
 @Service
 public class ProvincesServiceImpl implements ProvincesService {
 
-    @Autowired
-    private ProvincesMapper provincesMapper;
+    private final ProvincesMapper provincesMapper;
 
+    public ProvincesServiceImpl(ProvincesMapper provincesMapper) {
+        this.provincesMapper = provincesMapper;
+    }
 
     /**
-     * Provinces条件+分页查询
-     * @param provinces 查询条件
-     * @param page 页码
-     * @param size 页大小
-     * @return 分页结果
+     * 新增Provinces
+     * @param provinces      Provinces实体
+     * @return               响应数据
      */
     @Override
-    public PageInfo<Provinces> findPage(Provinces provinces, int page, int size){
-        //分页
-        PageHelper.startPage(page,size);
-        //搜索条件构建
-        Example example = createExample(provinces);
-        //执行搜索
-        return new PageInfo<Provinces>(provincesMapper.selectByExample(example));
+    public Result<Boolean> add(Provinces provinces){
+        if(provinces == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        int i = provincesMapper.insert(provinces);
+        if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
+        return new Result<>(false, StatusCode.ERROR, "操作失败");
+    }
+
+    /**
+     * 删除
+     * @param id        主键id
+     * @return          响应数据
+     */
+    @Override
+    public Result<Boolean> delete(String id){
+        if(StringUtils.isEmpty(id)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        int i = provincesMapper.deleteByPrimaryKey(id);
+        if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
+        return new Result<>(false, StatusCode.ERROR, "操作失败");
+    }
+
+    /**
+     * 修改Provinces
+     * @param provinces      Provinces实体
+     * @return              响应数据
+     */
+    @Override
+    public Result<Boolean> update(Provinces provinces){
+        if(provinces == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        int i = provincesMapper.updateByPrimaryKey(provinces);
+        if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
+        return new Result<>(false, StatusCode.ERROR, "操作失败");
+    }
+
+    /**
+     * 根据ID查询Provinces
+     * @param id        主键id
+     * @return          响应数据
+     */
+    @Override
+    public Result<Provinces> findById(String id) {
+        if(StringUtils.isEmpty(id)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        Provinces provinces = provincesMapper.selectByPrimaryKey(id);
+        if(provinces != null) { return new Result<>(true, StatusCode.OK, "查询成功", provinces); }
+        return new Result<>(false, StatusCode.ERROR, "查询失败",null);
+    }
+
+    /**
+     * 查询所有Provinces
+     * @return      响应数据
+     */
+    @Override
+    public Result<List<Provinces>> findAll() {
+        return new Result<>(true, StatusCode.OK, "查询成功", provincesMapper.selectAll());
     }
 
     /**
      * Provinces分页查询
-     * @param page
-     * @param size
-     * @return
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
      */
     @Override
-    public PageInfo<Provinces> findPage(int page, int size){
+    public Result<PageInfo<Provinces>> findByPager(Integer page, Integer pageSize){
+        if(page == null || pageSize == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常", null); }
         //静态分页
-        PageHelper.startPage(page,size);
+        PageHelper.startPage(page,pageSize);
         //分页查询
-        return new PageInfo<Provinces>(provincesMapper.selectAll());
+        return new Result<>(true, StatusCode.OK, "查询成功", new PageInfo<>(provincesMapper.selectAll()));
+    }
+
+
+    /**
+     * Provinces条件分页查询
+     * @param provinces      条件实体
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    @Override
+    public Result<PageInfo<Provinces>> findPagerByParam(Provinces provinces, Integer page, Integer pageSize){
+        //分页
+        PageHelper.startPage(page,pageSize);
+        //搜索条件构建
+        Example example = createExample(provinces);
+        //执行搜索
+        return new Result<>(true, StatusCode.OK, "操作成功", new PageInfo<Provinces>(provincesMapper.selectByExample(example)));
     }
 
     /**
-     * Provinces条件查询
-     * @param provinces
-     * @return
+     * Provinces多条件搜索方法
+     * @param provinces      条件实体
+     * @return              响应数据
      */
     @Override
-    public List<Provinces> findList(Provinces provinces){
+    public Result<List<Provinces>> findList(Provinces provinces){
+        if(provinces == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常",null); }
         //构建查询条件
         Example example = createExample(provinces);
         //根据构建的条件查询数据
-        return provincesMapper.selectByExample(example);
+        return new Result<>(true, StatusCode.OK, "操作成功", new PageInfo<Provinces>(provincesMapper.selectByExample(example)));
     }
 
 
     /**
      * Provinces构建查询对象
-     * @param provinces
-     * @return
+     * @param provinces      Provinces实体
+     * @return              查询对象
      */
-    public Example createExample(Provinces provinces){
-        Example example=new Example(Provinces.class);
+    private Example createExample(Provinces provinces){
+        Example example = new Example(Provinces.class);
         Example.Criteria criteria = example.createCriteria();
         if(provinces!=null){
             // 省份ID
-            if(!StringUtils.isEmpty(provinces.getProvinceid())){
-                    criteria.andEqualTo("provinceid",provinces.getProvinceid());
+            if(!StringUtils.isEmpty(provinces.getProvinceId())){
+                criteria.andEqualTo("provinceid",provinces.getProvinceId());
             }
             // 省份名称
             if(!StringUtils.isEmpty(provinces.getProvince())){
-                    criteria.andEqualTo("province",provinces.getProvince());
+                criteria.andEqualTo("province",provinces.getProvince());
             }
         }
         return example;
     }
 
-    /**
-     * 删除
-     * @param id
-     */
-    @Override
-    public void delete(String id){
-        provincesMapper.deleteByPrimaryKey(id);
-    }
-
-    /**
-     * 修改Provinces
-     * @param provinces
-     */
-    @Override
-    public void update(Provinces provinces){
-        provincesMapper.updateByPrimaryKey(provinces);
-    }
-
-    /**
-     * 增加Provinces
-     * @param provinces
-     */
-    @Override
-    public void add(Provinces provinces){
-        provincesMapper.insert(provinces);
-    }
-
-    /**
-     * 根据ID查询Provinces
-     * @param id
-     * @return
-     */
-    @Override
-    public Provinces findById(String id){
-        return  provincesMapper.selectByPrimaryKey(id);
-    }
-
-    /**
-     * 查询Provinces全部数据
-     * @return
-     */
-    @Override
-    public List<Provinces> findAll() {
-        return provincesMapper.selectAll();
-    }
 }

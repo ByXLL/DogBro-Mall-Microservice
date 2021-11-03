@@ -1,11 +1,11 @@
 package cn.byxll.user.dao;
-import com.changgou.user.pojo.UndoLog;
+
+import cn.byxll.user.pojo.UndoLog;
 import tk.mybatis.mapper.common.Mapper;
 
-/****
- * @Author:admin
- * @Description:UndoLog的Dao
- * @Date 2019/6/14 0:12
- *****/
+/**
+ * UndoLog的Dao 接口类
+ * @author  By-Lin
+ */
 public interface UndoLogMapper extends Mapper<UndoLog> {
 }

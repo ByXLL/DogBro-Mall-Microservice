@@ -1,11 +1,11 @@
 package cn.byxll.user.dao;
-import com.changgou.user.pojo.User;
+
+import cn.byxll.user.pojo.User;
 import tk.mybatis.mapper.common.Mapper;
 
-/****
- * @Author:admin
- * @Description:User的Dao
- * @Date 2019/6/14 0:12
- *****/
+/**
+ * User的Dao 接口类
+ * @author  By-Lin
+ */
 public interface UserMapper extends Mapper<User> {
 }

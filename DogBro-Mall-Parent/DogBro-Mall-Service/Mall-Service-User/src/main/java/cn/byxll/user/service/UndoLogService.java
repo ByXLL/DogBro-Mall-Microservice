@@ -1,69 +1,73 @@
 package cn.byxll.user.service;
 
-import com.changgou.user.pojo.UndoLog;
+import cn.byxll.user.pojo.UndoLog;
 import com.github.pagehelper.PageInfo;
+import entity.Result;
 
 import java.util.List;
 
-/****
- * @Author:admin
- * @Description:UndoLog业务层接口
- * @Date 2019/6/14 0:16
- *****/
+/**
+ * UndoLog业务层接口类
+ * @author @By-Lin
+ */
 public interface UndoLogService {
 
-    /***
-     * UndoLog多条件分页查询
-     * @param undoLog
-     * @param page
-     * @param size
-     * @return
-     */
-    PageInfo<UndoLog> findPage(UndoLog undoLog, int page, int size);
-
-    /***
-     * UndoLog分页查询
-     * @param page
-     * @param size
-     * @return
-     */
-    PageInfo<UndoLog> findPage(int page, int size);
-
-    /***
-     * UndoLog多条件搜索方法
-     * @param undoLog
-     * @return
-     */
-    List<UndoLog> findList(UndoLog undoLog);
-
-    /***
-     * 删除UndoLog
-     * @param id
-     */
-    void delete(Long id);
-
-    /***
-     * 修改UndoLog数据
-     * @param undoLog
-     */
-    void update(UndoLog undoLog);
-
-    /***
+    /**
      * 新增UndoLog
-     * @param undoLog
+     * @param   undoLog      UndoLog实体
+     * @return                 响应数据
      */
-    void add(UndoLog undoLog);
+    Result<Boolean> add(UndoLog undoLog);
+
+    /**
+     * 通过组件删除UndoLog
+     * @param id               主键id
+     * @return                 响应数据
+     */
+    Result<Boolean> delete(Long id);
+
+    /**
+     * 修改UndoLog数据
+     * @param undoLog      UndoLog实体
+     * @return              响应数据
+     */
+    Result<Boolean> update(UndoLog undoLog);
 
     /**
      * 根据ID查询UndoLog
-     * @param id
-     * @return
+     * @param id        主键id
+     * @return          响应数据
      */
-     UndoLog findById(Long id);
+    Result<UndoLog> findById(Long id);
 
-    /***
+    /**
      * 查询所有UndoLog
-     * @return
+     * @return          响应数据
      */
-    List<UndoLog> findAll();
+    Result<List<UndoLog>> findAll();
+
+    /**
+     * UndoLog分页查询
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<UndoLog>> findByPager(Integer page, Integer pageSize);
+
+    /**
+     * UndoLog条件分页查询
+     * @param undoLog      条件实体
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<UndoLog>> findPagerByParam(UndoLog undoLog, Integer page, Integer pageSize);
+    
+
+    /**
+     * UndoLog多条件搜索方法
+     * @param undoLog      条件实体
+     * @return              响应数据
+     */
+    Result<List<UndoLog>> findList(UndoLog undoLog);
 }

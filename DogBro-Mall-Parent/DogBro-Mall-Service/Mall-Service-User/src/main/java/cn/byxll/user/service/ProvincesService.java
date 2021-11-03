@@ -1,69 +1,73 @@
 package cn.byxll.user.service;
 
-import com.changgou.user.pojo.Provinces;
+import cn.byxll.user.pojo.Provinces;
 import com.github.pagehelper.PageInfo;
+import entity.Result;
 
 import java.util.List;
 
-/****
- * @Author:admin
- * @Description:Provinces业务层接口
- * @Date 2019/6/14 0:16
- *****/
+/**
+ * Provinces业务层接口类
+ * @author @By-Lin
+ */
 public interface ProvincesService {
 
-    /***
-     * Provinces多条件分页查询
-     * @param provinces
-     * @param page
-     * @param size
-     * @return
-     */
-    PageInfo<Provinces> findPage(Provinces provinces, int page, int size);
-
-    /***
-     * Provinces分页查询
-     * @param page
-     * @param size
-     * @return
-     */
-    PageInfo<Provinces> findPage(int page, int size);
-
-    /***
-     * Provinces多条件搜索方法
-     * @param provinces
-     * @return
-     */
-    List<Provinces> findList(Provinces provinces);
-
-    /***
-     * 删除Provinces
-     * @param id
-     */
-    void delete(String id);
-
-    /***
-     * 修改Provinces数据
-     * @param provinces
-     */
-    void update(Provinces provinces);
-
-    /***
+    /**
      * 新增Provinces
-     * @param provinces
+     * @param   provinces      Provinces实体
+     * @return                 响应数据
      */
-    void add(Provinces provinces);
+    Result<Boolean> add(Provinces provinces);
+
+    /**
+     * 通过组件删除Provinces
+     * @param id               主键id
+     * @return                 响应数据
+     */
+    Result<Boolean> delete(String id);
+
+    /**
+     * 修改Provinces数据
+     * @param provinces      Provinces实体
+     * @return              响应数据
+     */
+    Result<Boolean> update(Provinces provinces);
 
     /**
      * 根据ID查询Provinces
-     * @param id
-     * @return
+     * @param id        主键id
+     * @return          响应数据
      */
-     Provinces findById(String id);
+    Result<Provinces> findById(String id);
 
-    /***
+    /**
      * 查询所有Provinces
-     * @return
+     * @return          响应数据
      */
-    List<Provinces> findAll();
+    Result<List<Provinces>> findAll();
+
+    /**
+     * Provinces分页查询
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<Provinces>> findByPager(Integer page, Integer pageSize);
+
+    /**
+     * Provinces条件分页查询
+     * @param provinces      条件实体
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<Provinces>> findPagerByParam(Provinces provinces, Integer page, Integer pageSize);
+    
+
+    /**
+     * Provinces多条件搜索方法
+     * @param provinces      条件实体
+     * @return              响应数据
+     */
+    Result<List<Provinces>> findList(Provinces provinces);
 }

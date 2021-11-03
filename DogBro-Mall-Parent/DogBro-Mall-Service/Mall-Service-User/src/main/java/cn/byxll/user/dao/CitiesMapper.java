@@ -1,11 +1,11 @@
 package cn.byxll.user.dao;
-import com.changgou.user.pojo.Cities;
+
+import cn.byxll.user.pojo.Cities;
 import tk.mybatis.mapper.common.Mapper;
 
-/****
- * @Author:admin
- * @Description:Cities的Dao
- * @Date 2019/6/14 0:12
- *****/
+/**
+ * Cities的Dao 接口类
+ * @author  By-Lin
+ */
 public interface CitiesMapper extends Mapper<Cities> {
 }

@@ -47,7 +47,7 @@ public class AreasServiceImpl implements AreasService {
      */
     @Override
     public Result<Boolean> delete(String id) {
-        if(id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        if(StringUtils.isEmpty(id)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
         int i = areasMapper.deleteByPrimaryKey(id);
         if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
         return new Result<>(false, StatusCode.ERROR, "操作失败");
@@ -125,7 +125,7 @@ public class AreasServiceImpl implements AreasService {
      * @return              响应数据
      */
     @Override
-    public Result<PageInfo<Areas>> findByPagerParam(Areas areas, Integer page, Integer pageSize) {
+    public Result<PageInfo<Areas>> findPagerByParam(Areas areas, Integer page, Integer pageSize) {
         //分页
         PageHelper.startPage(page,pageSize);
         //搜索条件构建
@@ -140,7 +140,7 @@ public class AreasServiceImpl implements AreasService {
      * @param areas         实体
      * @return              查询对象
      */
-    public Example createExample(Areas areas){
+    private Example createExample(Areas areas){
         Example example=new Example(Areas.class);
         Example.Criteria criteria = example.createCriteria();
         if(areas!=null){

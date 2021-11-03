@@ -70,6 +70,6 @@ public interface AreasService {
      * @param pageSize      每页大小
      * @return              响应数据
      */
-    Result<PageInfo<Areas>> findByPagerParam(Areas areas, Integer page, Integer pageSize);
+    Result<PageInfo<Areas>> findPagerByParam(Areas areas, Integer page, Integer pageSize);
 
 }

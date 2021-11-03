@@ -1,6 +1,5 @@
 package cn.byxll.user.controller;
 
-import cn.byxll.user.pojo.Address;
 import cn.byxll.user.pojo.Areas;
 import cn.byxll.user.service.AreasService;
 import com.github.pagehelper.PageInfo;
@@ -26,7 +25,6 @@ public class AreasController {
 
     /**
      * 添加区域县区信息
-     *
      * @param areas 区县信息实体
      * @return 响应数据
      */
@@ -37,7 +35,6 @@ public class AreasController {
 
     /**
      * 删除Areas
-     *
      * @param id 主键id
      * @return 响应数据
      */
@@ -59,7 +56,6 @@ public class AreasController {
 
     /**
      * 根据ID查询Areas
-     *
      * @param id 主键
      * @return 响应数据
      */
@@ -70,7 +66,6 @@ public class AreasController {
 
     /**
      * 查询Areas全部数据
-     *
      * @return 响应数据
      */
     @GetMapping("/")
@@ -80,7 +75,6 @@ public class AreasController {
 
     /**
      * 按条件查询
-     *
      * @param areas 条件实体
      * @return 响应数据
      */
@@ -91,26 +85,24 @@ public class AreasController {
 
     /**
      * 分页查询
-     *
      * @param page     当前页码
      * @param pageSize 每页大小
      * @return 响应数据
      */
-    @GetMapping(value = "/search/{page}/{pageSize}")
+    @GetMapping("/search/{page}/{pageSize}")
     public Result<PageInfo<Areas>> findByPager(@PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
         return areasService.findByPager(page, pageSize);
     }
 
     /**
      * 按条件分页查询
-     *
      * @param areas    条件实体
      * @param page     当前页码
      * @param pageSize 每页大小
      * @return 响应数据
      */
-    @PostMapping(value = "/search/{page}/{pageSize}")
+    @PostMapping("/search/{page}/{pageSize}")
     public Result<PageInfo<Areas>> findByPagerParam(@RequestBody Areas areas, @PathVariable("page") Integer page, @PathVariable("pageSize") Integer pageSize) {
-        return areasService.findByPagerParam(areas, page, pageSize);
+        return areasService.findPagerByParam(areas, page, pageSize);
     }
 }

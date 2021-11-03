@@ -1,69 +1,73 @@
 package cn.byxll.user.service;
 
-import com.changgou.user.pojo.User;
+import cn.byxll.user.pojo.User;
 import com.github.pagehelper.PageInfo;
+import entity.Result;
 
 import java.util.List;
 
-/****
- * @Author:admin
- * @Description:User业务层接口
- * @Date 2019/6/14 0:16
- *****/
+/**
+ * User业务层接口类
+ * @author @By-Lin
+ */
 public interface UserService {
 
-    /***
-     * User多条件分页查询
-     * @param user
-     * @param page
-     * @param size
-     * @return
-     */
-    PageInfo<User> findPage(User user, int page, int size);
-
-    /***
-     * User分页查询
-     * @param page
-     * @param size
-     * @return
-     */
-    PageInfo<User> findPage(int page, int size);
-
-    /***
-     * User多条件搜索方法
-     * @param user
-     * @return
-     */
-    List<User> findList(User user);
-
-    /***
-     * 删除User
-     * @param id
-     */
-    void delete(String id);
-
-    /***
-     * 修改User数据
-     * @param user
-     */
-    void update(User user);
-
-    /***
+    /**
      * 新增User
-     * @param user
+     * @param   user      User实体
+     * @return                 响应数据
      */
-    void add(User user);
+    Result<Boolean> add(User user);
+
+    /**
+     * 通过组件删除User
+     * @param id               主键id
+     * @return                 响应数据
+     */
+    Result<Boolean> delete(String id);
+
+    /**
+     * 修改User数据
+     * @param user      User实体
+     * @return              响应数据
+     */
+    Result<Boolean> update(User user);
 
     /**
      * 根据ID查询User
-     * @param id
-     * @return
+     * @param id        主键id
+     * @return          响应数据
      */
-     User findById(String id);
+    Result<User> findById(String id);
 
-    /***
+    /**
      * 查询所有User
-     * @return
+     * @return          响应数据
      */
-    List<User> findAll();
+    Result<List<User>> findAll();
+
+    /**
+     * User分页查询
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<User>> findByPager(Integer page, Integer pageSize);
+
+    /**
+     * User条件分页查询
+     * @param user      条件实体
+     * @param page          当前页码
+     * @param pageSize      每页大小
+     * @return              响应数据
+     */
+    Result<PageInfo<User>> findPagerByParam(User user, Integer page, Integer pageSize);
+    
+
+    /**
+     * User多条件搜索方法
+     * @param user      条件实体
+     * @return              响应数据
+     */
+    Result<List<User>> findList(User user);
 }

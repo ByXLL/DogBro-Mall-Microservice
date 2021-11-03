@@ -1,11 +1,11 @@
 package cn.byxll.user.dao;
-import com.changgou.user.pojo.Provinces;
+
+import cn.byxll.user.pojo.Provinces;
 import tk.mybatis.mapper.common.Mapper;
 
-/****
- * @Author:admin
- * @Description:Provinces的Dao
- * @Date 2019/6/14 0:12
- *****/
+/**
+ * Provinces的Dao 接口类
+ * @author  By-Lin
+ */
 public interface ProvincesMapper extends Mapper<Provinces> {
 }

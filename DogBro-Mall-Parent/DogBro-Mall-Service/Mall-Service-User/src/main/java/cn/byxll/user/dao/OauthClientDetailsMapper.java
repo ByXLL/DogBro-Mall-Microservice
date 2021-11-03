@@ -1,11 +1,11 @@
 package cn.byxll.user.dao;
-import com.changgou.user.pojo.OauthClientDetails;
+
+import cn.byxll.user.pojo.OauthClientDetails;
 import tk.mybatis.mapper.common.Mapper;
 
-/****
- * @Author:admin
- * @Description:OauthClientDetails的Dao
- * @Date 2019/6/14 0:12
- *****/
+/**
+ * OauthClientDetails的Dao 接口类
+ * @author  By-Lin
+ */
 public interface OauthClientDetailsMapper extends Mapper<OauthClientDetails> {
 }
