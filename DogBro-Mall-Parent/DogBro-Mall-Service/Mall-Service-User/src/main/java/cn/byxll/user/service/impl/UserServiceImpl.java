@@ -1,10 +1,12 @@
 package cn.byxll.user.service.impl;
 
 import cn.byxll.user.dao.UserMapper;
+import cn.byxll.user.dto.LoginFormDto;
 import cn.byxll.user.pojo.User;
 import cn.byxll.user.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import entity.BCrypt;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,22 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserMapper userMapper) {
         this.userMapper = userMapper;
+    }
+
+    /**
+     * 登录
+     * @param loginFormDto  User实体
+     * @return              响应数据
+     */
+    @Override
+    public Result<Boolean> login(LoginFormDto loginFormDto) {
+        if(loginFormDto == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        User user = userMapper.selectByPrimaryKey(loginFormDto.getUserName());
+        if(user == null) { return new Result<>(false, StatusCode.LOGINERROR, "登录失败，请检查用户名和密码"); }
+        if(BCrypt.checkpw(loginFormDto.getPassword(),user.getPassword())) {
+            return new Result<>(true, StatusCode.OK, "登录成功");
+        }
+        return new Result<>(false, StatusCode.LOGINERROR, "登录失败，请检查用户名和密码");
     }
 
     /**

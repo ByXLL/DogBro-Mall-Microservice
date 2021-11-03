@@ -1,5 +1,6 @@
 package cn.byxll.user.controller;
 
+import cn.byxll.user.dto.LoginFormDto;
 import cn.byxll.user.pojo.User;
 import cn.byxll.user.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,11 @@ public class UserController {
 
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
+    }
+
+    @PostMapping("/login")
+    public Result<Boolean> login(@RequestBody LoginFormDto loginFormDto) {
+        return userService.login(loginFormDto);
     }
 
     /**

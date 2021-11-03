@@ -1,5 +1,6 @@
 package cn.byxll.user.service;
 
+import cn.byxll.user.dto.LoginFormDto;
 import cn.byxll.user.pojo.User;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
@@ -13,9 +14,17 @@ import java.util.List;
 public interface UserService {
 
     /**
+     * 登录
+     * @param   loginFormDto      User实体
+     * @return                    响应数据
+     */
+    Result<Boolean> login(LoginFormDto loginFormDto);
+
+
+    /**
      * 新增User
      * @param   user      User实体
-     * @return                 响应数据
+     * @return            响应数据
      */
     Result<Boolean> add(User user);
 
