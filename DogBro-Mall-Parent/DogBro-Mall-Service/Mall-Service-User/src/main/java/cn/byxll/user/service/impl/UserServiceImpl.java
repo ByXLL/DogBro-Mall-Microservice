@@ -4,16 +4,26 @@ import cn.byxll.user.dao.UserMapper;
 import cn.byxll.user.dto.LoginFormDto;
 import cn.byxll.user.pojo.User;
 import cn.byxll.user.service.UserService;
+import cn.byxll.user.vo.LoginResultVO;
+import cn.byxll.user.vo.UserVO;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import entity.BCrypt;
+import org.springframework.beans.BeanUtils;
+import utils.BCrypt;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
+import utils.JwtUtil;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * User业务层接口实现类
@@ -31,17 +41,35 @@ public class UserServiceImpl implements UserService {
     /**
      * 登录
      * @param loginFormDto  User实体
+     * @param   httpServletResponse     响应体
      * @return              响应数据
      */
     @Override
-    public Result<Boolean> login(LoginFormDto loginFormDto) {
-        if(loginFormDto == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+    public Result<LoginResultVO> login(LoginFormDto loginFormDto, HttpServletResponse httpServletResponse) {
+        if(loginFormDto == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常",null); }
         User user = userMapper.selectByPrimaryKey(loginFormDto.getUserName());
         if(user == null) { return new Result<>(false, StatusCode.LOGINERROR, "登录失败，请检查用户名和密码"); }
         if(BCrypt.checkpw(loginFormDto.getPassword(),user.getPassword())) {
-            return new Result<>(true, StatusCode.OK, "登录成功");
+            // 创建用户令牌
+            Map<String,Object> info = new HashMap<>(16);
+            info.put("role","USER");
+            info.put("success","SUCCESS");
+            info.put("username",loginFormDto.getUserName());
+            String token = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(info), null);
+            // 将令牌存入Cookie
+            Cookie cookie = new Cookie("Authorization", token);
+            cookie.setDomain("localhost");
+            cookie.setPath("/");
+            httpServletResponse.addCookie(cookie);
+            // 封装用户信息回传
+            LoginResultVO loginResultVO = new LoginResultVO();
+            loginResultVO.setToken(token);
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(userVO,user);
+            loginResultVO.setUserInfo(userVO);
+            return new Result<>(true, StatusCode.OK, "登录成功",loginResultVO);
         }
-        return new Result<>(false, StatusCode.LOGINERROR, "登录失败，请检查用户名和密码");
+        return new Result<>(false, StatusCode.LOGINERROR, "登录失败，请检查用户名和密码",null);
     }
 
     /**

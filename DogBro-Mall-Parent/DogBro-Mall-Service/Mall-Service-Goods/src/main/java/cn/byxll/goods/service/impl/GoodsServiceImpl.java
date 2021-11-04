@@ -13,7 +13,7 @@ import cn.byxll.goods.service.GoodsService;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import entity.IdWorker;
+import utils.IdWorker;
 import entity.Result;
 import entity.StatusCode;
 import exception.OperationalException;

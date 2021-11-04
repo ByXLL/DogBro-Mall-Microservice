@@ -1,4 +1,4 @@
-package entity;
+package utils;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;

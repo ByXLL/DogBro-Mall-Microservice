@@ -9,7 +9,7 @@ import java.util.Date;
  * 用户vo 实体
  * @author By-Lin
  */
-public class UserVo implements Serializable {
+public class UserVO implements Serializable {
     private String username;
 
     private String phone;

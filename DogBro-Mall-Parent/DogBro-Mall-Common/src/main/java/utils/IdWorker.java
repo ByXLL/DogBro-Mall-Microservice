@@ -1,4 +1,4 @@
-package entity;
+package utils;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;

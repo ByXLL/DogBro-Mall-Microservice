@@ -3,10 +3,12 @@ package cn.byxll.user.controller;
 import cn.byxll.user.dto.LoginFormDto;
 import cn.byxll.user.pojo.User;
 import cn.byxll.user.service.impl.UserServiceImpl;
+import cn.byxll.user.vo.LoginResultVO;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -26,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result<Boolean> login(@RequestBody LoginFormDto loginFormDto) {
-        return userService.login(loginFormDto);
+    public Result<LoginResultVO> login(@RequestBody LoginFormDto loginFormDto, HttpServletResponse httpServletResponse) {
+        return userService.login(loginFormDto,httpServletResponse);
     }
 
     /**

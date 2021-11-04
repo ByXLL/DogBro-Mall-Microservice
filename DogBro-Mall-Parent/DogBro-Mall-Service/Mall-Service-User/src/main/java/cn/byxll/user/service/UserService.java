@@ -2,9 +2,11 @@ package cn.byxll.user.service;
 
 import cn.byxll.user.dto.LoginFormDto;
 import cn.byxll.user.pojo.User;
+import cn.byxll.user.vo.LoginResultVO;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -15,10 +17,11 @@ public interface UserService {
 
     /**
      * 登录
-     * @param   loginFormDto      User实体
-     * @return                    响应数据
+     * @param   loginFormDto            User实体
+     * @param   httpServletResponse     响应体
+     * @return                          响应数据
      */
-    Result<Boolean> login(LoginFormDto loginFormDto);
+    Result<LoginResultVO> login(LoginFormDto loginFormDto, HttpServletResponse httpServletResponse);
 
 
     /**
