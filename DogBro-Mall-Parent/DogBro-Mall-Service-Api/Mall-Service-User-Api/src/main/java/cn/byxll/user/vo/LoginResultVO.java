@@ -1,10 +1,12 @@
 package cn.byxll.user.vo;
 
+import java.io.Serializable;
+
 /**
  * 登录响应结果
  * @author By-Lin
  */
-public class LoginResultVO {
+public class LoginResultVO implements Serializable {
     private String token;
     private UserVO userInfo;
 

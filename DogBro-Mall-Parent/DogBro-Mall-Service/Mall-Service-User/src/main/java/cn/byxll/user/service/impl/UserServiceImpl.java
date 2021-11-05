@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 import utils.JwtUtil;
+import utils.PasswordUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
         if(loginFormDto == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常",null); }
         User user = userMapper.selectByPrimaryKey(loginFormDto.getUserName());
         if(user == null) { return new Result<>(false, StatusCode.LOGINERROR, "登录失败，请检查用户名和密码"); }
-        if(BCrypt.checkpw(loginFormDto.getPassword(),user.getPassword())) {
+        if(PasswordUtil.verifyPassword(loginFormDto.getPassword(),user.getPassword())) {
             // 创建用户令牌
             Map<String,Object> info = new HashMap<>(16);
             info.put("role","USER");
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
             LoginResultVO loginResultVO = new LoginResultVO();
             loginResultVO.setToken(token);
             UserVO userVO = new UserVO();
-            BeanUtils.copyProperties(userVO,user);
+            BeanUtils.copyProperties(user,userVO);
             loginResultVO.setUserInfo(userVO);
             return new Result<>(true, StatusCode.OK, "登录成功",loginResultVO);
         }
@@ -80,6 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result<Boolean> add(User user){
         if(user == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        user.setPassword(PasswordUtil.getMd5Password(user.getPassword()));
         int i = userMapper.insert(user);
         if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
         return new Result<>(false, StatusCode.ERROR, "操作失败");
