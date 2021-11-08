@@ -17,6 +17,7 @@
         <module>DogBro-Mall-Eureka</module>
         <module>DogBro-Mall-Common</module>
         <module>DogBro-Mall-Common-DB</module>
+        <module>DogBro-Mall-User-Oauth</module>
     </modules>
 
     <properties>
