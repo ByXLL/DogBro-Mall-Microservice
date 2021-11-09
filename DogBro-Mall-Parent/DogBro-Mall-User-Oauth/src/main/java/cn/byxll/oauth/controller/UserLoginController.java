@@ -16,12 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * 描述
- *
- * @author www.itheima.com
- * @version 1.0
- * @package com.changgou.oauth.controller *
- * @since 1.0
+ * 用户登录请求
+ * @author By-Lin
  */
 @RestController
 @RequestMapping("/user")

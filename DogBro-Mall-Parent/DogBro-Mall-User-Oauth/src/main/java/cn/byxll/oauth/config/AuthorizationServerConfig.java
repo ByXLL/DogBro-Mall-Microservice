@@ -59,17 +59,27 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("dogbro")          // 客户端id
-                .secret("Aa123456")                      // 秘钥
-                .redirectUris("http://localhost")       // 重定向地址
-                .accessTokenValiditySeconds(3600)          // 访问令牌有效期
-                .refreshTokenValiditySeconds(3600)         // 刷新令牌有效期
+                // 客户端id
+                .withClient("DogBro")
+                // 秘钥
+                .secret("Aa123456")
+                // 重定向地址
+                .redirectUris("http://localhost")
+                // 访问令牌有效期
+                .accessTokenValiditySeconds(3600)
+                // 刷新令牌有效期
+                .refreshTokenValiditySeconds(3600)
                 .authorizedGrantTypes(
-                        "authorization_code",          // 根据授权码生成令牌
-                        "client_credentials",          // 客户端认证
-                        "refresh_token",                // 刷新令牌
-                        "password")                     // 密码方式认证
-                .scopes("app");                         // 客户端范围，名称自定义，必填
+                        // 根据授权码生成令牌
+                        "authorization_code",
+                        // 客户端认证
+                        "client_credentials",
+                        // 刷新令牌
+                        "refresh_token",
+                        // 密码方式认证
+                        "password")
+                // 客户端范围，名称自定义，必填
+                .scopes("app");
     }
 
     /**
@@ -80,9 +90,12 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.accessTokenConverter(jwtAccessTokenConverter)
-                .authenticationManager(authenticationManager)//认证管理器
-                .tokenStore(tokenStore)                       //令牌存储
-                .userDetailsService(userDetailsService);     //用户信息service
+                // 认证管理器
+                .authenticationManager(authenticationManager)
+                // 令牌存储
+                .tokenStore(tokenStore)
+                // 用户信息service
+                .userDetailsService(userDetailsService);
     }
 
     /***
@@ -129,11 +142,14 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     public JwtAccessTokenConverter jwtAccessTokenConverter(CustomUserAuthenticationConverter customUserAuthenticationConverter) {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         KeyPair keyPair = new KeyStoreKeyFactory(
-                keyProperties.getKeyStore().getLocation(),                          //证书路径 dogbro.jks
-                keyProperties.getKeyStore().getSecret().toCharArray())              //证书秘钥 Aa123456
-                .getKeyPair(
-                        keyProperties.getKeyStore().getAlias(),                     //证书别名 DogBro
-                        keyProperties.getKeyStore().getPassword().toCharArray());   //证书密码 Aa123456
+                // 证书路径 dogbro.jks
+                keyProperties.getKeyStore().getLocation(),
+                // 证书秘钥 Aa123456
+                keyProperties.getKeyStore().getSecret().toCharArray()).getKeyPair(
+                        // 证书别名 DogBro
+                        keyProperties.getKeyStore().getAlias(),
+                        // 证书密码 Aa123456
+                        keyProperties.getKeyStore().getPassword().toCharArray());
         converter.setKeyPair(keyPair);
         //配置自定义的CustomUserAuthenticationConverter
         DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();

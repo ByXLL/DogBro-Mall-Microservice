@@ -28,13 +28,13 @@ public class CreateJwtTest {
     @Test
     public void testCreateToken(){
         //证书文件路径
-        String key_location="changgou.jks";
+        String key_location="dogbro.jks";
         //秘钥库密码
-        String key_password="changgou";
+        String key_password="Aa123456";
         //秘钥密码
-        String keypwd = "changgou";
+        String keypwd = "Aa123456";
         //秘钥别名
-        String alias = "changgou";
+        String alias = "DogBro";
 
         //访问证书路径 读取jks的文件
         ClassPathResource resource = new ClassPathResource(key_location);
@@ -51,7 +51,7 @@ public class CreateJwtTest {
         //自定义Payload
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("id", "1");
-        tokenMap.put("name", "itheima");
+        tokenMap.put("name", "DogBro");
         tokenMap.put("roles", "ROLE_VIP,ROLE_USER");
 
         //生成Jwt令牌
