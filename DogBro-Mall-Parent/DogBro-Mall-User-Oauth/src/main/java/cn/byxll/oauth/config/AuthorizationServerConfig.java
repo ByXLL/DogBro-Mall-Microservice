@@ -25,36 +25,40 @@ import javax.sql.DataSource;
 import java.security.KeyPair;
 
 
+/**
+ * 授权服务器配置类
+ */
 @Configuration
 @EnableAuthorizationServer
 class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    // 数据源，用于从数据库获取数据进行认证操作，测试可以从内存中获取
+    /** 数据源，用于从数据库获取数据进行认证操作，测试可以从内存中获取 */
     @Autowired
     private DataSource dataSource;
 
-    // jwt令牌转换器
+    /** jwt令牌转换器 **/
     @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    // SpringSecurity 用户自定义授权认证类
+    /** SpringSecurity 用户自定义授权认证类 */
     @Autowired
     UserDetailsService userDetailsService;
 
-    // 授权认证管理器
+    /** 授权认证管理器 */
     @Autowired
     AuthenticationManager authenticationManager;
 
-    // 令牌持久化存储接口
+    /** 令牌持久化存储接口 */
     @Autowired
     TokenStore tokenStore;
 
     @Autowired
     private CustomUserAuthenticationConverter customUserAuthenticationConverter;
 
-    /***
-     * 客户端信息配置
-     * @param clients
-     * @throws Exception
+
+    /**
+     * 重写客户端信息配置
+     * @param clients       客户端配置信息实体
+     * @throws Exception    异常
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -83,9 +87,9 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     /**
-     * 授权服务器端点配置
-     * @param endpoints
-     * @throws Exception
+     * 重写授权服务器端点配置
+     * @param endpoints     服务器端点配置实体
+     * @throws Exception    抛出异常
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -98,10 +102,10 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
                 .userDetailsService(userDetailsService);
     }
 
-    /***
-     * 授权服务器的安全配置
-     * @param oauthServer
-     * @throws Exception
+    /**
+     * 重写授权服务器的安全配置
+     * @param oauthServer       服务器的安全配置类
+     * @throws Exception        抛出异常
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {

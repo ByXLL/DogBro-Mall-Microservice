@@ -14,12 +14,10 @@ import java.security.interfaces.RSAPrivateKey;
 import java.util.HashMap;
 import java.util.Map;
 
-/*****
- * @Author: www.itheima
- * @Date: 2019/7/7 13:42
- * @Description: com.changgou.token
- *      创建JWT令牌，使用私钥加密
- ****/
+/**
+ * 创建JWT令牌，使用私钥加密
+ * @author By-Lin
+ */
 public class CreateJwtTest {
 
     /***

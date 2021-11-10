@@ -9,18 +9,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 自定义用户身份验证转换器
+ * @author  By-Lin
+ */
 @Component
 public class CustomUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
-    @Autowired
-    UserDetailsService userDetailsService;
+    final UserDetailsService userDetailsService;
 
+    public CustomUserAuthenticationConverter(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    /**
+     * 重写 security 默认的权限信息转换器 改成我们自定义的jwt载体信息
+     * @param authentication        当前用户的验证信息
+     * @return                      自定义的信息
+     */
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
-        LinkedHashMap response = new LinkedHashMap();
+        HashMap<String,Object> response = new HashMap<>(16);
         String name = authentication.getName();
         response.put("username", name);
 
@@ -35,7 +48,7 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
         }
         response.put("name", userJwt.getName());
         response.put("id", userJwt.getId());
-        //公司 response.put("compy", "songsi");
+        response.put("company",userJwt.getCompany());
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put("authorities", AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }

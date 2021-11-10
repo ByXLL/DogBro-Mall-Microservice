@@ -12,15 +12,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Security 配置类
+ * @author By-Lin
+ */
 @Configuration
 @EnableWebSecurity
 @Order(-1)
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /***
+    /**
      * 忽略安全拦截的URL
-     * @param web
-     * @throws Exception
+     * @param web           WebSecurity 实例
+     * @throws Exception    抛出异常
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -31,14 +35,13 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 创建授权管理认证对象
-     * @return
-     * @throws Exception
+     * @return              授权管理认证对象
+     * @throws Exception    抛出异常
      */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager manager = super.authenticationManagerBean();
-        return manager;
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -48,7 +51,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 采用BCryptPasswordEncoder对密码进行编码
-     * @return
+     * @return      加密后的密码
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,9 +59,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     *
-     * @param http
-     * @throws Exception
+     *  重写配置
+     * @param http          HttpSecurity 配置类
+     * @throws Exception    抛出异常
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
