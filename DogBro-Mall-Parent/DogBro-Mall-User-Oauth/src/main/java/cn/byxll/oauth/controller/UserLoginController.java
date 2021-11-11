@@ -14,17 +14,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 用户登录请求
+ * 在正常的认证中 我们需要在 body中将账号密码，和授权方式grant_type 还要在请求头中将客户端id和客户端密码回传
+ * 但是真实环境中，是不可能将客户端id和密码交给用户的
+ * 所有我们将这些默认携带的参数在请求中自动加上，让用户只用提交账号和密码即可
  * @author By-Lin
  */
 @RestController
 @RequestMapping("/user")
 public class UserLoginController {
-
-    @Autowired
-    private LoginService loginService;
 
     @Value("${auth.clientId}")
     private String clientId;
@@ -32,37 +33,24 @@ public class UserLoginController {
     @Value("${auth.clientSecret}")
     private String clientSecret;
 
-    private static final String GRAND_TYPE = "password";//授权模式 密码模式
+    /** 授权模式 密码模式 */
+    private static final String GRANT_TYPE = "password";
 
+    private final LoginService loginService;
 
-    @Value("${auth.cookieDomain}")
-    private String cookieDomain;
-
-    //Cookie生命周期
-    @Value("${auth.cookieMaxAge}")
-    private int cookieMaxAge;
+    public UserLoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
 
     /**
      * 密码模式  认证.
-     *
-     * @param username
-     * @param password
-     * @return
+     * @param username      用户名
+     * @param password      密码
+     * @return              响应结果
      */
     @RequestMapping("/login")
-    public Result<Map> login(String username, String password) {
-        //登录 之后生成令牌的数据返回
-        AuthToken authToken = loginService.login(username, password, clientId, clientSecret, GRAND_TYPE);
-
-
-        //设置到cookie中
-        saveCookie(authToken.getAccessToken());
-        return new Result<>(true, StatusCode.OK,"令牌生成成功",authToken);
-    }
-
-    private void saveCookie(String token){
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        CookieUtil.addCookie(response,cookieDomain,"/","Authorization",token,cookieMaxAge,false);
+    public Result<AuthToken> login(String username, String password) {
+        return loginService.login(username, password, clientId, clientSecret, GRANT_TYPE);
     }
 }

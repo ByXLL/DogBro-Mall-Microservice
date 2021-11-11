@@ -55,12 +55,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String pwd = new BCryptPasswordEncoder().encode("Aa123456");
         //创建User对象
         String permissions = "goods_list,seckill_list";
-
-
         UserJwt userDetails = new UserJwt(username,pwd,AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
-
-
-        //userDetails.setComy(songsi);
+        userDetails.setCompany("Tencent");
         return userDetails;
     }
 }

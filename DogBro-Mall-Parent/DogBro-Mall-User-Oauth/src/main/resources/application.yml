@@ -25,15 +25,18 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:7001/eureka
-auth:
-  ttl: 3600  # token存储到redis的过期时间
-  clientId: DogBro  # 客户端id 用户登录auth
-  clientSecret: Aa123456 # 客户端密钥
-  cookieDomain: localhost
-  cookieMaxAge: -1
+
 encrypt:
   key-store:
     location: classpath:/dogbro.jks     # 证书路径
     secret: Aa123456    # 证书密钥  加载用的密码
     alias: DogBro       # 证书别名
     password: Aa123456    # 证书密码  读取信息用的密码
+
+# 自定义信息
+auth:
+  ttl: 3600  # token存储到redis的过期时间
+  clientId: DogBro  # 客户端id 用户登录auth
+  clientSecret: Aa123456 # 客户端密钥
+  cookieDomain: localhost
+  cookieMaxAge: -1

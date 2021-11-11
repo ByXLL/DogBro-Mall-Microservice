@@ -8,7 +8,7 @@ import java.util.Collection;
 
 /**
  * 扩展的用户jwt 对象
- * 用于对 security user类的一个信息扩展
+ * 用于对 security user类的一个信息扩展 用于token载荷
  * @author By-Lin
  */
 public class UserJwt extends User {

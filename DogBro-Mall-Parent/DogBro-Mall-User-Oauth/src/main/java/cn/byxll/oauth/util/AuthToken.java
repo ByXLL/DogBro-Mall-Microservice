@@ -2,19 +2,20 @@ package cn.byxll.oauth.util;
 
 import java.io.Serializable;
 
-/****
- * @Author:www.itheima
- * @Date:2019/5/18 14:52
- * @Description:用户令牌封装
- *****/
+/**
+ * 用户令牌封装
+ * @author By-Lin
+ */
 public class AuthToken implements Serializable{
 
-    //令牌信息
-    String accessToken;
-    //刷新token(refresh_token)
-    String refreshToken;
-    //jwt短令牌
-    String jti;
+    /** 令牌信息 */
+    private String accessToken;
+
+    /** 刷新token(refresh_token) */
+    private String refreshToken;
+
+    /** jwt短令牌 */
+    private String jti;
 
     public String getAccessToken() {
         return accessToken;
