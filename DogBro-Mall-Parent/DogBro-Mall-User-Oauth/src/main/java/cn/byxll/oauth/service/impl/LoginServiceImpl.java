@@ -87,7 +87,7 @@ public class LoginServiceImpl implements LoginService {
          * 参数4  返回数据需要转换的类型
          */
         ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
-        HttpStatus statusCode = responseEntity.getStatusCode();
+        int statusCode = responseEntity.getStatusCode().value();
         if(!"200".equals(String.valueOf(statusCode)) || responseEntity.getBody() == null) {
             return new Result<>(false,StatusCode.LOGINERROR,"登录失败，请检查用户名和密码",null);
         }
@@ -111,17 +111,19 @@ public class LoginServiceImpl implements LoginService {
         return new Result<>(true, StatusCode.OK,"登录成功",authToken);
     }
 
-
-    public static void main(String[] args) {
-        byte[] decode = Base64.getDecoder().decode(new String("Y2hhbmdnb3UxOmNoYW5nZ291Mg==").getBytes());
-        System.out.println(new String(decode));
-    }
     /**
      * 设置cookie
      * @param token     token
      */
     private void saveCookie(String token){
         HttpServletResponse response = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
-        CookieUtil.addCookie(response,cookieDomain,"/","Authorization",token,cookieMaxAge,false);
+        if (response != null) {
+            CookieUtil.addCookie(response,cookieDomain,"/","Authorization",token,cookieMaxAge,false);
+        }
+    }
+
+    public static void main(String[] args) {
+        byte[] decode = Base64.getDecoder().decode(new String("Y2hhbmdnb3UxOmNoYW5nZ291Mg==").getBytes());
+        System.out.println(new String(decode));
     }
 }

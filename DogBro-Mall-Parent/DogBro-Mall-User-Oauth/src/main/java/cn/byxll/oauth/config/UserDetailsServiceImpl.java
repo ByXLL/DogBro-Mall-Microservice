@@ -51,10 +51,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
 
-        //根据用户名查询用户信息
+        // 根据用户名查询用户信息
         String pwd = new BCryptPasswordEncoder().encode("Aa123456");
-        //创建User对象
-        String permissions = "goods_list,seckill_list";
+        // 创建User对象
+        // 指定用户的角色信息
+        String permissions = "user,admin";
         UserJwt userDetails = new UserJwt(username,pwd,AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
         userDetails.setCompany("Tencent");
         return userDetails;

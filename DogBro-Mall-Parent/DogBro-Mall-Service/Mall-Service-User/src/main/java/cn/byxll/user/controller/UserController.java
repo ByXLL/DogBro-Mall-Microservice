@@ -6,6 +6,7 @@ import cn.byxll.user.service.impl.UserServiceImpl;
 import cn.byxll.user.vo.LoginResultVO;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import java.util.List;
 
 /**
  * User 控制器类
+ * PreAuthorize("hasAnyRole('vip')") 该注解用于权限校验 hasAnyRole 当拥有某一个角色是才可以调用该接口
  * @author By-Lin
  */
 
@@ -77,6 +79,7 @@ public class UserController {
      * @return          响应数据
      */
     @GetMapping("/")
+    @PreAuthorize("hasAnyRole('vip')")
     public Result<List<User>> findAll(){
         return userService.findAll();
     }
