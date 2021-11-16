@@ -1,6 +1,7 @@
 package base64;
 
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -27,5 +28,11 @@ public class Base64Test {
         byte[] decode = Base64.getDecoder().decode(decoderStr);
         String encodeStr = new String(decode, StandardCharsets.UTF_8);
         System.out.println("解密后的密文 "+encodeStr);
+    }
+
+    @Test
+    public void testBCryptPasswordEncode() {
+        String encode = new BCryptPasswordEncoder().encode("Aa1234546");
+        System.out.println("加密后的密文 "+encode);
     }
 }

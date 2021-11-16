@@ -2,11 +2,10 @@ package cn.byxll.oauth.service;
 
 import cn.byxll.oauth.util.AuthToken;
 
-/*****
- * @Author: www.itheima
- * @Date: 2019/7/7 16:23
- * @Description: com.changgou.oauth.service
- ****/
+/**
+ * 权限校验 service 接口类
+ * @author By-Lin
+ */
 public interface AuthService {
 
     /***

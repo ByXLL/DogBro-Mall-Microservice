@@ -1,5 +1,6 @@
 package cn.byxll.oauth.config;
 
+import cn.byxll.oauth.util.Md5PasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -55,7 +56,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+//        return new BCryptPasswordEncoder();
+        return new Md5PasswordEncoder();
     }
 
     /**

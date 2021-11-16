@@ -76,7 +76,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //所有请求必须认证通过
         http.authorizeRequests()
                 // 配置放行地址
-                .antMatchers( "/user/add").
+                .antMatchers( "/user/add","/user/load/*").
                 permitAll()
                 .anyRequest().
                 authenticated();    //其他地址需要认证授权

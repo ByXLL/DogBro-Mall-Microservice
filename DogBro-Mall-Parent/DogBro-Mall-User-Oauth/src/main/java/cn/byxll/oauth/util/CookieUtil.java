@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by admin on 2018/3/18.
+ * cookie 工具类
+ * @author By-Lin
  */
 public class CookieUtil {
 

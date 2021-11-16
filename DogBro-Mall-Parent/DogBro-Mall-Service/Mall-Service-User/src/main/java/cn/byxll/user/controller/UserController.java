@@ -69,7 +69,7 @@ public class UserController {
      * @param id        主键id
      * @return          响应数据
      */
-    @GetMapping("/{id}")
+    @GetMapping({"/{id}","/load/{id}"})
     public Result<User> findById(@PathVariable("id") String id){
         return userService.findById(id);
     }

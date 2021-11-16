@@ -20,7 +20,7 @@ public class PasswordUtil {
         if (StringUtils.isEmpty(password)) {
             throw new IllegalArgumentException("MD5加密失败,密码为空");
         }
-        System.out.println(password+SALT);
+//        System.out.println(password+SALT);
         return DigestUtils.md5DigestAsHex((password+SALT).getBytes());
     }
 

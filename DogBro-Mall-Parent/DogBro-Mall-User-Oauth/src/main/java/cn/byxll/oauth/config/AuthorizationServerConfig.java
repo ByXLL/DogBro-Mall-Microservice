@@ -1,5 +1,9 @@
 package cn.byxll.oauth.config;
 
+import cn.byxll.oauth.exception.MyAccessDeniedHandler;
+import cn.byxll.oauth.exception.MyAuthenticationEntryPoint;
+import cn.byxll.oauth.exception.MyWebResponseExceptionTranslator;
+import cn.byxll.oauth.util.Md5PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
@@ -27,6 +32,7 @@ import java.security.KeyPair;
 
 /**
  * 授权服务器配置类
+ * @author By-Lin
  */
 @Configuration
 @EnableAuthorizationServer
@@ -62,28 +68,32 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                // 客户端id
-                .withClient("DogBro")
-                // 秘钥
-                .secret("Aa123456")
-                // 重定向地址
-                .redirectUris("http://localhost")
-                // 访问令牌有效期
-                .accessTokenValiditySeconds(3600)
-                // 刷新令牌有效期
-                .refreshTokenValiditySeconds(3600)
-                .authorizedGrantTypes(
-                        // 根据授权码生成令牌
-                        "authorization_code",
-                        // 客户端认证
-                        "client_credentials",
-                        // 刷新令牌
-                        "refresh_token",
-                        // 密码方式认证
-                        "password")
-                // 客户端范围，名称自定义，必填
-                .scopes("app");
+        // 从数据库加载客户端信息
+        clients.jdbc(dataSource).clients(clientDetails());
+
+        // 静态数据
+//        clients.inMemory()
+//                // 客户端id
+//                .withClient("DogBro")
+//                // 秘钥
+//                .secret("Aa123456")
+//                // 重定向地址
+//                .redirectUris("http://localhost")
+//                // 访问令牌有效期
+//                .accessTokenValiditySeconds(3600)
+//                // 刷新令牌有效期
+//                .refreshTokenValiditySeconds(3600)
+//                .authorizedGrantTypes(
+//                        // 根据授权码生成令牌
+//                        "authorization_code",
+//                        // 客户端认证
+//                        "client_credentials",
+//                        // 刷新令牌
+//                        "refresh_token",
+//                        // 密码方式认证
+//                        "password")
+//                // 客户端范围，名称自定义，必填
+//                .scopes("app");
     }
 
     /**
@@ -110,7 +120,8 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer.allowFormAuthenticationForClients()
-                .passwordEncoder(new BCryptPasswordEncoder())
+                // 全局密码加密类
+//                .passwordEncoder(new BCryptPasswordEncoder())
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
@@ -150,10 +161,10 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
                 keyProperties.getKeyStore().getLocation(),
                 // 证书秘钥 Aa123456
                 keyProperties.getKeyStore().getSecret().toCharArray()).getKeyPair(
-                        // 证书别名 DogBro
-                        keyProperties.getKeyStore().getAlias(),
-                        // 证书密码 Aa123456
-                        keyProperties.getKeyStore().getPassword().toCharArray());
+                // 证书别名 DogBro
+                keyProperties.getKeyStore().getAlias(),
+                // 证书密码 Aa123456
+                keyProperties.getKeyStore().getPassword().toCharArray());
         converter.setKeyPair(keyPair);
         //配置自定义的CustomUserAuthenticationConverter
         DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();

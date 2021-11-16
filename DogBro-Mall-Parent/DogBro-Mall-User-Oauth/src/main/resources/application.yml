@@ -13,8 +13,8 @@ spring:
         max-idle: 8
         min-idle: 0
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/dogbro_mall_user?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/dogbro_mall_oauth?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: Aa123456
   main:

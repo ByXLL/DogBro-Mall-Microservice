@@ -105,7 +105,7 @@ public class LoginServiceImpl implements LoginService {
         authToken.setRefreshToken((String) body.get("refresh_token"));
 
         // 设置到cookie中
-        saveCookie(authToken.getAccessToken());
+//        saveCookie(authToken.getAccessToken());
 
         //6.返回
         return new Result<>(true, StatusCode.OK,"登录成功",authToken);
