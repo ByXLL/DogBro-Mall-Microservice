@@ -9,6 +9,8 @@ import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -171,5 +173,14 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
         accessTokenConverter.setUserTokenConverter(customUserAuthenticationConverter);
         return converter;
     }
+
+
+//    @Bean
+//    public AuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
+//        DaoAuthenticationProvider impl = new DaoAuthenticationProvider();
+//        impl.setUserDetailsService(userDetailsService);
+//        impl.setHideUserNotFoundExceptions(false) ;
+//        return impl ;
+//    }
 }
 

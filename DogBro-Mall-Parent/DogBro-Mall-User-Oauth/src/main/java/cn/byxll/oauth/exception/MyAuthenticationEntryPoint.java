@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 对于资源访问的异常自定义认证入口点
  * @author By-Lin
  */
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -19,7 +20,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         Map<String,Object> map = new HashMap(16);
         map.put("errorentry", "401");
-        map.put("message", authException.getMessage());
+        map.put("message", "校验失败"+authException.getMessage());
         map.put("path", request.getServletPath());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         response.setContentType("application/json");

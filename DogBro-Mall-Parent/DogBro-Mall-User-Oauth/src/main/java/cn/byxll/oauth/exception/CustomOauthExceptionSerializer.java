@@ -3,9 +3,12 @@ package cn.byxll.oauth.exception;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import entity.Result;
+import entity.StatusCode;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,10 +26,10 @@ public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauthExc
     public void serialize(CustomOauthException value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         //可以不用下面的代码，只用 jsonGenerator.writeRawValue(myJsonString)  输出自定义字符串
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeNumberField("code4444", value.getHttpErrorCode());
-        jsonGenerator.writeBooleanField("status", false);
+        jsonGenerator.writeBooleanField("flag", false);
+        jsonGenerator.writeNumberField("code", StatusCode.ACCESSERROR);
         jsonGenerator.writeObjectField("data", null);
-        jsonGenerator.writeObjectField("errors", Arrays.asList(value.getOAuth2ErrorCode(),value.getMessage()));
+        jsonGenerator.writeObjectField("message", value.getHttpErrorCode() +  Arrays.asList(value.getOAuth2ErrorCode(),value.getMessage()).toString());
         if (value.getAdditionalInformation()!=null) {
             for (Map.Entry<String, String> entry : value.getAdditionalInformation().entrySet()) {
                 String key = entry.getKey();

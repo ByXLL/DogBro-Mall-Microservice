@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 全局异常处理器
  * @author By-Lin
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class BaseExceptionHandler {
 
     @ResponseBody

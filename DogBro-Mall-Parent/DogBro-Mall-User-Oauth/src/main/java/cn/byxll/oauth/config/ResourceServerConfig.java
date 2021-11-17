@@ -9,7 +9,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 
 /**
- * 1、其他资源访问异常处理配置
+ * 自定义资源访问认证异常处理配置
+ * 没有token，或token错误
+ * 自定义资源访问认证异常，使用MyAuthenticationEntryPoint
  * @author By-Lin
  */
 @Configuration
@@ -17,8 +19,9 @@ import org.springframework.security.oauth2.provider.authentication.TokenExtracto
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        //自定义资源访问认证异常，没有token，或token错误，使用MyAuthenticationEntryPoint
+        // 认证入口点
         resources.authenticationEntryPoint(new MyAuthenticationEntryPoint());
+        //
         resources.accessDeniedHandler(new MyAccessDeniedHandler());
     }
 }

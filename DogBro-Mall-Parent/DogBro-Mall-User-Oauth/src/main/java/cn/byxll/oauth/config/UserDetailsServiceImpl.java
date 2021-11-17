@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     /**
-     * 从写授权认证
+     * 重写授权认证
      * @param username
      * @return
      * @throws UsernameNotFoundException
@@ -67,21 +67,40 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         AuthorityUtils.commaSeparatedStringToAuthorityList(String.valueOf(clientDetails.getAuthorities())));
             }
         }
-
-
         // 用户信息验证
-        if (StringUtils.isEmpty(username)) {
-            throw new CustomOauthException("用户不存在");
-        }
+        if (StringUtils.isEmpty(username)) { throw new UsernameNotFoundException("用户名为空"); }
         // 从数据库加载查询用户信息
         Result<cn.byxll.user.pojo.User> userResult = userFeign.findById(username);
-        if(userResult == null || !userResult.isFlag() || userResult.getData()== null) {
-            throw new CustomOauthException("用户不存在");
-        }
-
+        if(userResult == null || !userResult.isFlag() || userResult.getData()== null) {return null;}
 
         // 根据用户名查询用户信息
-//         String pwd = new BCryptPasswordEncoder().encode("Aa123456");
+        // String pwd = new BCryptPasswordEncoder().encode("Aa123456");
+        String pwd = userResult.getData().getPassword();
+        // 创建User对象
+        // 指定用户的角色信息  模拟设计 后面通过数据库设计补充
+        String permissions = "user,admin";
+        UserJwt userDetails = new UserJwt(username,pwd,AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
+        userDetails.setCompany("Tencent");
+        return userDetails;
+//        return checkUserInfo(username);
+
+    }
+
+    /**
+     * 用户信息验证
+     * 调用user微服务校验用户信息
+     * @param username      用户名
+     * @return              生成的用户详情token信息
+     */
+    private UserDetails checkUserInfo(String username) {
+        // 用户信息验证
+        if (StringUtils.isEmpty(username)) { throw new UsernameNotFoundException("用户名为空"); }
+        // 从数据库加载查询用户信息
+        Result<cn.byxll.user.pojo.User> userResult = userFeign.findById(username);
+        if(userResult == null || !userResult.isFlag() || userResult.getData()== null) {return null;}
+
+        // 根据用户名查询用户信息
+        // String pwd = new BCryptPasswordEncoder().encode("Aa123456");
         String pwd = userResult.getData().getPassword();
         // 创建User对象
         // 指定用户的角色信息  模拟设计 后面通过数据库设计补充

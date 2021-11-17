@@ -7,7 +7,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 
 /**
- * 1、资源访问异常处理配置
+ * 认证服务器处理配置
+ * /oauth/token 异常处理
  * @author By-Lin
  */
 @Configuration

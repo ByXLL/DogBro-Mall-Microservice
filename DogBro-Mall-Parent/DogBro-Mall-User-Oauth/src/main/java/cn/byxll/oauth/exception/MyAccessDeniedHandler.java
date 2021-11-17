@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 访问拒绝处理器
  * @author By-Lin
  */
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
@@ -20,7 +21,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType("application/json;charset=UTF-8");
         Map map = new HashMap();
         map.put("errorauth", "400");
-        map.put("message", accessDeniedException.getMessage());
+        map.put("message", "访问被拒绝" + accessDeniedException.getMessage());
         map.put("path", request.getServletPath());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         response.setContentType("application/json");

@@ -65,6 +65,7 @@ public class LoginServiceImpl implements LoginService {
          */
 
         ServiceInstance choose = loadBalancerClient.choose("user-auth");
+        if(choose == null) { return new Result<>(false,StatusCode.REMOTEERROR,"用户权限服务异常，请稍后重试",null); }
         String url = choose.getUri().toString()+"/oauth/token";
 
         // 2.定义请求头信息 (客户端id和客户端密钥) base64加密
@@ -80,35 +81,43 @@ public class LoginServiceImpl implements LoginService {
         // 4.模拟浏览器 发送POST 请求 携带 头 和请求体 到认证服务器
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formData, headers);
 
-        /*
-         * 参数1  指定要发送的请求的url
-         * 参数2  指定要发送的请求的方法 post
-         * 参数3  指定请求实体(包含头和请求体数据)
-         * 参数4  返回数据需要转换的类型
-         */
-        ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
-        int statusCode = responseEntity.getStatusCode().value();
-        if(!"200".equals(String.valueOf(statusCode)) || responseEntity.getBody() == null) {
+
+        try {
+            /*
+             * 参数1  指定要发送的请求的url
+             * 参数2  指定要发送的请求的方法 post
+             * 参数3  指定请求实体(包含头和请求体数据)
+             * 参数4  返回数据需要转换的类型
+             */
+            ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+            int statusCode = responseEntity.getStatusCode().value();
+            if(!"200".equals(String.valueOf(statusCode)) || responseEntity.getBody() == null) {
+                return new Result<>(false,StatusCode.LOGINERROR,"登录失败，请检查用户名和密码",null);
+            }
+
+            //5.接收到返回的响应(就是:令牌的信息)
+            Map body = responseEntity.getBody();
+
+            // 封装AuthToken.
+            AuthToken authToken = new AuthToken();
+            // 访问令牌(jwt)
+            authToken.setJti((String) body.get("jti"));
+            // 刷新令牌(jwt)
+            authToken.setAccessToken((String) body.get("access_token"));
+            // jti，作为用户的身份标识
+            authToken.setRefreshToken((String) body.get("refresh_token"));
+
+            // 设置到cookie中
+//        saveCookie(authToken.getAccessToken());
+
+            //6.返回
+            return new Result<>(true, StatusCode.OK,"登录成功",authToken);
+
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
             return new Result<>(false,StatusCode.LOGINERROR,"登录失败，请检查用户名和密码",null);
         }
 
-        //5.接收到返回的响应(就是:令牌的信息)
-        Map body = responseEntity.getBody();
-
-        // 封装AuthToken.
-        AuthToken authToken = new AuthToken();
-        // 访问令牌(jwt)
-        authToken.setJti((String) body.get("jti"));
-        // 刷新令牌(jwt)
-        authToken.setAccessToken((String) body.get("access_token"));
-        // jti，作为用户的身份标识
-        authToken.setRefreshToken((String) body.get("refresh_token"));
-
-        // 设置到cookie中
-//        saveCookie(authToken.getAccessToken());
-
-        //6.返回
-        return new Result<>(true, StatusCode.OK,"登录成功",authToken);
     }
 
     /**
