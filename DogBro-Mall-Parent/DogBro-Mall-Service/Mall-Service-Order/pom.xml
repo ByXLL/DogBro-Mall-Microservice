@@ -3,36 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>DogBro-Mall-Parent</artifactId>
+        <artifactId>DogBro-Mall-Service</artifactId>
         <groupId>cn.byxll</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>DogBro-Mall-Service</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>Mall-Service-Goods</module>
-        <module>Mall-Service-File</module>
-        <module>Mall-Service-Canal</module>
-        <module>Mall-Service-Search</module>
-        <module>Mall-Service-User</module>
-        <module>Mall-Service-Order</module>
-    </modules>
+    <artifactId>Mall-Service-Order</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+
     <description>
-        商城各大业务微服务的父工程
+        订单微服务工程
     </description>
 
     <dependencies>
         <dependency>
             <groupId>cn.byxll</groupId>
-            <artifactId>DogBro-Mall-Common-DB</artifactId>
+            <artifactId>Mall-Service-Order-Api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
