@@ -21,7 +21,7 @@ public interface SpuService {
      * @param id  主键id
      * @return    响应数据
      */
-    Result<Boolean> delete(String id);
+    Result<Boolean> delete(Long id);
 
     /**
      * 修改Spu数据
@@ -35,6 +35,6 @@ public interface SpuService {
      * @param id    主键id
      * @return      响应数据
      */
-    Result<Spu> findById(String id);
+    Result<Spu> findById(Long id);
 
 }

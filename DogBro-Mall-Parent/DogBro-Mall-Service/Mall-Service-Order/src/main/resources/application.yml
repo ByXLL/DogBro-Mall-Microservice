@@ -20,6 +20,15 @@ eureka:
       defaultZone: http://127.0.0.1:7001/eureka
   instance:
     prefer-ip-address: true
+
+# 开启feign的熔断机制，默认是线程池隔离
 feign:
   hystrix:
     enabled: true
+# 使用信号量隔离 解决 开启feign的熔断机制的时候，feign拦截器无法获取请求头问题
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE

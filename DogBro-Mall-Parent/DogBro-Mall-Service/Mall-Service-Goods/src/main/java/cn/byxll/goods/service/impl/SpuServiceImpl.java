@@ -39,8 +39,8 @@ public class SpuServiceImpl implements SpuService {
      * @return        响应数据
      */
     @Override
-    public Result<Boolean> delete(String id){
-        if(StringUtils.isEmpty(id)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+    public Result<Boolean> delete(Long id){
+        if(id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
         int i = spuMapper.deleteByPrimaryKey(id);
         if(i>0) { return new Result<>(true, StatusCode.OK, "删除成功"); }
         return new Result<>(false, StatusCode.ERROR, "操作失败");
@@ -65,8 +65,8 @@ public class SpuServiceImpl implements SpuService {
      * @return          响应数据
      */
     @Override
-    public Result<Spu> findById(String id){
-        if(StringUtils.isEmpty(id)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常",null); }
+    public Result<Spu> findById(Long id){
+        if(id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常",null); }
         Spu spu = spuMapper.selectByPrimaryKey(id);
         if(spu == null) { return new Result<>(false, StatusCode.ERROR, "查询失败",null); }
         return new Result<>(true, StatusCode.OK, "查询成功", spu);

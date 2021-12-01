@@ -1,4 +1,4 @@
-package cn.byxll.user.config;
+package cn.byxll.goods.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,9 +76,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //所有请求必须认证通过
         http.authorizeRequests()
                 // 配置放行地址
-                .antMatchers( "/user/add")
-                .permitAll()
-                .anyRequest()
-                .authenticated();    //其他地址需要认证授权
+                .antMatchers( "/spec/**").
+                permitAll()
+                .anyRequest().
+                authenticated();    //其他地址需要认证授权
     }
 }

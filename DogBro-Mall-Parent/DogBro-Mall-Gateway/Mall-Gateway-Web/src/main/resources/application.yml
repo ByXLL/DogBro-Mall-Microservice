@@ -39,7 +39,17 @@ spring:
                 key-resolver: "#{@ipKeyResolver}"
                 redis-rate-limiter.replenishRate: 1
                 redis-rate-limiter.burstCapacity: 4
-
+        - id: mall_order_route            # 唯一标识符
+          uri: lb://order                 # 使用LoadBalancerClient  实现负载均衡，后面是微服务的name
+          predicates:
+            - Path=/api/cart/**,/api/categoryReport/**,/api/orderConfig/**,/api/order/**,/api/orderItem/**,/api/orderLog/**,/api/preferential/**,/api/returnCause/**,/api/returnOrder/**,/api/returnOrderItem/**
+          filters:
+                  - StripPrefix=1
+                  - name: RequestRateLimiter
+                    args:
+                      key-resolver: "#{@ipKeyResolver}"
+                      redis-rate-limiter.replenishRate: 1
+                      redis-rate-limiter.burstCapacity: 4
 eureka:
   client:
     service-url:

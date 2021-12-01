@@ -33,6 +33,10 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
+        String url = request.getPath().toString();
+        // 如果用户访问的是一些不需要鉴权的url，直接放行
+        if(!UrlFilter.hasAuthorize(url)) { return chain.filter(exchange); }
+
         // 获取用户信息 默认从请求头中获取
         String token = request.getHeaders().getFirst(AUTHORIZE_TOKEN);
         // 判断token是否存在请求头中

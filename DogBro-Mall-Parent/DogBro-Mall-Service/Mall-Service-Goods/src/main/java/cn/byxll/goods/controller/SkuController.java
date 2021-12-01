@@ -4,10 +4,7 @@ import cn.byxll.goods.pojo.Sku;
 import cn.byxll.goods.pojo.Spec;
 import cn.byxll.goods.service.impl.SkuServiceImpl;
 import entity.Result;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +19,16 @@ public class SkuController {
 
     public SkuController(SkuServiceImpl skuService) {
         this.skuService = skuService;
+    }
+
+    /**
+     * 根据id查询
+     * @param id skuId
+     * @return   响应数据
+     */
+    @GetMapping("/{id}")
+    public Result<Sku> findById(@PathVariable("id") String id) {
+        return skuService.findById(id);
     }
 
     /**
