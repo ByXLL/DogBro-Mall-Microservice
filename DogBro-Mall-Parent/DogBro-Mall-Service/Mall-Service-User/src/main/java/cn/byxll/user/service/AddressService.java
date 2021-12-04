@@ -43,6 +43,13 @@ public interface AddressService {
     Result<Address> findById(Integer id);
 
     /**
+     * 根据用户名查询收货地址列表
+     * @param userName      用户名
+     * @return              响应数据
+     */
+    Result<Address> findByUserName(String userName);
+
+    /**
      * 查询所有Address
      * @return      响应数据
      */

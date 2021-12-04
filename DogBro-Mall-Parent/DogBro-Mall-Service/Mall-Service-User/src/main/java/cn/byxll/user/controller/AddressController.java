@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 /**
@@ -62,6 +63,16 @@ public class AddressController {
     @GetMapping("/{id}")
     public Result<Address> findById(@PathVariable("id") Integer id){
         return addressService.findById(id);
+    }
+
+    /**
+     * 根据用户名查询用户收货地址列表
+     * @param userName  用户名
+     * @return          响应数据
+     */
+    @GetMapping("/findByUserName")
+    public Result<Address> findById(@PathParam("userName") String userName){
+        return addressService.findByUserName(userName);
     }
 
     /**

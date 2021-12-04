@@ -80,6 +80,22 @@ public class AddressServiceImpl implements AddressService {
     }
 
     /**
+     * 根据用户名查询收货地址列表
+     *
+     * @param userName 用户名
+     * @return 响应数据
+     */
+    @Override
+    public Result<Address> findByUserName(String userName) {
+        if(StringUtils.isEmpty(userName)) { return new Result<>(false,StatusCode.ARGERROR,"参数异常",null); }
+        Address address = new Address();
+        address.setUsername(userName);
+        Example example = createExample(address);
+        List<Address> addressList = addressMapper.selectByExample(example);
+        return new Result<>(true,StatusCode.OK,"操作成功",addressList);
+    }
+
+    /**
      * 查询Address全部数据
      * @return      响应数据
      */
