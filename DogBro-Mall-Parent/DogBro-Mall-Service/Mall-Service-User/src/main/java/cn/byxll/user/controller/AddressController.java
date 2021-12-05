@@ -5,6 +5,7 @@ import cn.byxll.user.service.impl.AddressServiceImpl;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
+import utils.OAuthTokenDecode;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
@@ -67,12 +68,12 @@ public class AddressController {
 
     /**
      * 根据用户名查询用户收货地址列表
-     * @param userName  用户名
      * @return          响应数据
      */
     @GetMapping("/findByUserName")
-    public Result<Address> findById(@PathParam("userName") String userName){
-        return addressService.findByUserName(userName);
+    public Result<Address> findById(){
+        String username = OAuthTokenDecode.getUserInfo().get("username");
+        return addressService.findByUserName(username);
     }
 
     /**
