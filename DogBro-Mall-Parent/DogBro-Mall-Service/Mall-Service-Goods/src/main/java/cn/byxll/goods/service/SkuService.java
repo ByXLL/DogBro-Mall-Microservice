@@ -3,8 +3,10 @@ package cn.byxll.goods.service;
 import cn.byxll.goods.pojo.Sku;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Sku Service接口类
@@ -26,6 +28,12 @@ public interface SkuService {
      */
     Result<Boolean> delete(String id);
 
+    /**
+     * 减库存
+     * @param decrMap 减库存信息
+     * @return        响应数据
+     */
+    Result<Boolean> decrCount(@RequestBody Map<Long,Integer> decrMap);
     /**
      * 修改Sku数据
      * @param sku  实体

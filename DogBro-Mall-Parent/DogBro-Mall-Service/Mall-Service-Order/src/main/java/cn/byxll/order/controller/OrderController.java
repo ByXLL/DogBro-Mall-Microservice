@@ -1,5 +1,6 @@
 package cn.byxll.order.controller;
 
+import cn.byxll.order.dto.OrderDto;
 import cn.byxll.order.pojo.Order;
 import cn.byxll.order.service.impl.OrderServiceImpl;
 import com.github.pagehelper.PageInfo;
@@ -25,12 +26,12 @@ public class OrderController {
 
     /**
      * 新增Order数据
-     * @param order      Order实体
+     * @param orderDto      Order dto 实体
      * @return              响应数据
      */
     @PostMapping("/add")
-    public Result<Boolean> add(@RequestBody Order order){
-        return orderService.add(order);
+    public Result<Boolean> add(@RequestBody OrderDto orderDto){
+        return orderService.add(orderDto);
     }
 
     /**

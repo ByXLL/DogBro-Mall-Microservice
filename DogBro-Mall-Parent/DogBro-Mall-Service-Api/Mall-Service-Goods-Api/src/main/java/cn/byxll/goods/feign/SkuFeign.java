@@ -1,15 +1,12 @@
 package cn.byxll.goods.feign;
 
-import cn.byxll.goods.dto.Goods;
 import cn.byxll.goods.pojo.Sku;
 import org.springframework.cloud.openfeign.FeignClient;
-import com.github.pagehelper.PageInfo;
 import entity.Result;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * SkuFeign 接口
@@ -34,5 +31,13 @@ public interface SkuFeign {
      */
     @GetMapping("/{id}")
     Result<Sku> findById(@PathVariable("id") Long id);
+
+    /**
+     * 减库存
+     * @param decrMap   减库存信息
+     * @return   响应数据
+     */
+    @PostMapping("/decrCount")
+    Result<Boolean> decrCount(@RequestBody Map<Long,Integer> decrMap);
 
 }

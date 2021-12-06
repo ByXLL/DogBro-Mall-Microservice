@@ -1,5 +1,6 @@
 package cn.byxll.order.service;
 
+import cn.byxll.order.dto.OrderDto;
 import cn.byxll.order.pojo.Order;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
@@ -14,10 +15,10 @@ public interface OrderService {
 
     /**
      * 新增Order
-     * @param   order      Order实体
+     * @param   orderDto       Order dto 实体
      * @return                 响应数据
      */
-    Result<Boolean> add(Order order);
+    Result<Boolean> add(OrderDto orderDto);
 
     /**
      * 通过组件删除Order

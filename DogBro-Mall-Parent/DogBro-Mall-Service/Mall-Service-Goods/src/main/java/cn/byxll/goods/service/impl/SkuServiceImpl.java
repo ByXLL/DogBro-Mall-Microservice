@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Sku Service接口实现类
@@ -47,6 +48,21 @@ public class SkuServiceImpl implements SkuService {
         if(StringUtils.isEmpty(id)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
         int i = skuMapper.deleteByPrimaryKey(id);
         if(i>0) { return new Result<>(true, StatusCode.OK, "删除成功"); }
+        return new Result<>(false, StatusCode.ERROR, "操作失败");
+    }
+
+    /**
+     * 减库存
+     * @param decrMap 减库存信息
+     * @return        响应数据
+     */
+    @Override
+    public Result<Boolean> decrCount(Map<Long,Integer> decrMap){
+        if(decrMap == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        Long skuId = Long.valueOf(decrMap.get("skuId"));
+        Integer num = decrMap.get("num");
+        int i = skuMapper.decrCount(skuId,num);
+        if(i>0) { return new Result<>(true, StatusCode.OK, "减库存成功"); }
         return new Result<>(false, StatusCode.ERROR, "操作失败");
     }
 

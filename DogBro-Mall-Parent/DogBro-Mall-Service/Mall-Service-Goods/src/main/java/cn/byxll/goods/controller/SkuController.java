@@ -1,12 +1,12 @@
 package cn.byxll.goods.controller;
 
 import cn.byxll.goods.pojo.Sku;
-import cn.byxll.goods.pojo.Spec;
 import cn.byxll.goods.service.impl.SkuServiceImpl;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author By-Lin
@@ -29,6 +29,15 @@ public class SkuController {
     @GetMapping("/{id}")
     public Result<Sku> findById(@PathVariable("id") String id) {
         return skuService.findById(id);
+    }
+    /**
+     * 减库存
+     * @param decrMap   减库存信息
+     * @return   响应数据
+     */
+    @PostMapping("/decrCount")
+    public Result<Boolean> decrCount(@RequestBody Map<Long,Integer> decrMap) {
+        return skuService.decrCount(decrMap);
     }
 
     /**

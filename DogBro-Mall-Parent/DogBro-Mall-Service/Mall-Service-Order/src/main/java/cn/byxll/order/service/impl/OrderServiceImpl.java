@@ -1,17 +1,28 @@
 package cn.byxll.order.service.impl;
 
+import cn.byxll.goods.feign.SkuFeign;
+import cn.byxll.goods.pojo.Sku;
+import cn.byxll.order.dao.OrderItemMapper;
 import cn.byxll.order.dao.OrderMapper;
+import cn.byxll.order.dto.OrderDto;
 import cn.byxll.order.pojo.Order;
+import cn.byxll.order.pojo.OrderItem;
 import cn.byxll.order.service.OrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import entity.StatusCode;
+import exception.OperationalException;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
+import utils.IdWorker;
+import utils.OAuthTokenDecode;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Order业务层接口实现类
@@ -21,22 +32,84 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
+    private final SkuFeign skuFeign;
+    private final RedisTemplate redisTemplate;
 
-    public OrderServiceImpl(OrderMapper orderMapper) {
+    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, SkuFeign skuFeign, RedisTemplate redisTemplate) {
         this.orderMapper = orderMapper;
+        this.orderItemMapper = orderItemMapper;
+        this.skuFeign = skuFeign;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
      * 新增Order
-     * @param order      Order实体
+     * @param orderDto       Order dto实体
      * @return               响应数据
      */
     @Override
-    public Result<Boolean> add(Order order){
-        if(order == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+    @Transactional(rollbackFor = OperationalException.class)
+    public Result<Boolean> add(OrderDto orderDto){
+        IdWorker idWorker = new IdWorker();
+        String userName = OAuthTokenDecode.getUserInfo().get("username");
+        if(orderDto == null || org.apache.commons.lang.StringUtils.isEmpty(userName)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        Order order = new Order();
+        BeanUtils.copyProperties(orderDto,order);
+        order.setId(String.valueOf(idWorker.nextId()));
+        order.setUsername(userName);
+        order.setCreateTime(new Date());
+        order.setUpdateTime(order.getCreateTime());
+        order.setSourceType("1");
+        order.setOrderStatus("0");
+        order.setPayStatus("0");
+        order.setIsDelete("0");
+        // 校验金额
+
+
+        // 获取购物车信息
+        List<OrderItem> userCartList = redisTemplate.boundHashOps("Cart_" + userName).values();
+        if(userCartList == null || orderDto.getSkuList().size() <1) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        List<OrderItem> orderItems = new ArrayList<>(16);
+        List<Long> skuIdList = orderDto.getSkuList();
+        for (OrderItem cartItem : userCartList) {
+            Long id = Long.valueOf(cartItem.getSkuId());
+            if(skuIdList.contains(id)) {
+                orderItems.add(cartItem);
+                // 清空购物车
+                redisTemplate.boundHashOps("Cart_" + userName).delete(id);
+            }
+        }
+        if(orderItems.size() < 1) { throw new OperationalException("创建订单失败"); }
+
+        int totalNum = 0;
+        int totalMoney = 0 ;
+        // 封装Map<Long,Integer>  封装递减数据
+        Map<Long,Integer> decrMap = new HashMap<>(16);
+        for (OrderItem orderItem : orderItems) {
+            totalNum += orderItem.getNum();
+            totalMoney += orderItem.getMoney();
+            orderItem.setId(String.valueOf(idWorker.nextId()));
+            orderItem.setOrderId(order.getId());
+            orderItem.setPayMoney(orderItem.getMoney());
+            orderItem.setIsReturn("0");
+            decrMap.put(Long.valueOf(orderItem.getSkuId()),orderItem.getNum());
+        }
+        order.setTotalNum(totalNum);
+        order.setTotalMoney(totalMoney);
+        order.setPayMoney(totalMoney);
+
         int i = orderMapper.insert(order);
-        if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
-        return new Result<>(false, StatusCode.ERROR, "操作失败");
+        if(i<0) { throw new OperationalException("创建订单失败");}
+        for (OrderItem orderItem : orderItems) {
+            int row = orderItemMapper.insert(orderItem);
+            if(row < 1) { throw new OperationalException("创建订单失败"); }
+        }
+
+        // 扣除库存
+        Result<Boolean> result = skuFeign.decrCount(decrMap);
+        if(!result.isFlag()){ throw new OperationalException("创建订单失败");  }
+        return new Result<>(true, StatusCode.OK, "操作成功",order);
     }
 
     /**
