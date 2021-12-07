@@ -98,6 +98,8 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalNum(totalNum);
         order.setTotalMoney(totalMoney);
         order.setPayMoney(totalMoney);
+        order.setBuyerRate("0");
+        order.setConsignStatus("0");
 
         int i = orderMapper.insert(order);
         if(i<0) { throw new OperationalException("创建订单失败");}

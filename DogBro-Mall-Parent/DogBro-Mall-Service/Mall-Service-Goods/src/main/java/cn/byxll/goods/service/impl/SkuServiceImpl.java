@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import entity.StatusCode;
+import exception.OperationalException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -59,11 +60,13 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public Result<Boolean> decrCount(Map<Long,Integer> decrMap){
         if(decrMap == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
-        Long skuId = Long.valueOf(decrMap.get("skuId"));
-        Integer num = decrMap.get("num");
-        int i = skuMapper.decrCount(skuId,num);
-        if(i>0) { return new Result<>(true, StatusCode.OK, "减库存成功"); }
-        return new Result<>(false, StatusCode.ERROR, "操作失败");
+        for (Map.Entry<Long, Integer> entry : decrMap.entrySet()) {
+            Long skuId = entry.getKey();
+            Integer num = entry.getValue();
+            int i = skuMapper.decrCount(skuId,num);
+            if(i<1) { throw new OperationalException("扣减库存失败"); }
+        }
+        return new Result<>(true, StatusCode.OK, "操作成功");
     }
 
     /**
