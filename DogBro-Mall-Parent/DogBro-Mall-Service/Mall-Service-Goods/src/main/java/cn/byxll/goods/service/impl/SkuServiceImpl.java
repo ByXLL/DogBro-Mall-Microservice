@@ -10,6 +10,7 @@ import entity.StatusCode;
 import exception.OperationalException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class SkuServiceImpl implements SkuService {
      * @return        响应数据
      */
     @Override
+    @Transactional(rollbackFor = OperationalException.class)
     public Result<Boolean> decrCount(Map<Long,Integer> decrMap){
         if(decrMap == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
         for (Map.Entry<Long, Integer> entry : decrMap.entrySet()) {

@@ -18,6 +18,7 @@
         <module>Mall-Service-Search</module>
         <module>Mall-Service-User</module>
         <module>Mall-Service-Order</module>
+        <module>Mall-Service-Pay</module>
     </modules>
 
     <properties>
