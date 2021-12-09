@@ -5,6 +5,7 @@ import cn.byxll.order.pojo.Order;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -33,6 +34,20 @@ public interface OrderService {
      * @return              响应数据
      */
     Result<Boolean> update(Order order);
+
+    /**
+     * 更新订单支付状态
+     * @param outTradeNo        订单编号
+     * @param payTime           支付时间
+     * @param transactionId     交易流水号
+     */
+    void updateOrderPayStatus(String outTradeNo, String payTime, String transactionId) throws ParseException;
+
+    /**
+     * 取消订单
+     * @param outTradeNo    订单编号
+     */
+    void cancelOrder(String outTradeNo);
 
     /**
      * 根据ID查询Order

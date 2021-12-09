@@ -13,6 +13,11 @@ spring:
     port: 6379
   main:
     allow-bean-definition-overriding: true
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 eureka:
   client:

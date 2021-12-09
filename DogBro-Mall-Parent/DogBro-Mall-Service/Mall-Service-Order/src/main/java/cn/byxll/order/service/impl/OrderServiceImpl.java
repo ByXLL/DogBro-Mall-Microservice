@@ -22,6 +22,8 @@ import tk.mybatis.mapper.entity.Example;
 import utils.IdWorker;
 import utils.OAuthTokenDecode;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -139,6 +141,56 @@ public class OrderServiceImpl implements OrderService {
         if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
         return new Result<>(false, StatusCode.ERROR, "操作失败");
     }
+
+    /**
+     * 更新订单支付状态
+     *
+     * @param outTradeNo    订单编号
+     * @param payTime       支付时间
+     * @param transactionId 交易流水号
+     */
+    @Override
+    public void updateOrderPayStatus(String outTradeNo, String payTime, String transactionId) throws ParseException {
+        if(StringUtils.isEmpty(outTradeNo) || StringUtils.isEmpty(payTime) || StringUtils.isEmpty(transactionId)) { throw new OperationalException("修改订单状态失败，参数异常"); }
+        Order order = orderMapper.selectByPrimaryKey(outTradeNo);
+        if(order == null) { throw new OperationalException("修改订单状态失败，订单不存在"); }
+        order.setPayStatus("1");
+        order.setTransactionId(transactionId);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date payDateTime = simpleDateFormat.parse(payTime);
+        order.setPayTime(payDateTime);
+        int i = orderMapper.updateByPrimaryKey(order);
+        if(i<1) { throw new OperationalException("修改订单支付状态失败"); }
+    }
+
+    /**
+     * 取消订单
+     * @param outTradeNo 订单编号
+     */
+    @Override
+    @Transactional(rollbackFor = OperationalException.class)
+    public void cancelOrder(String outTradeNo) {
+        if(StringUtils.isEmpty(outTradeNo)) {  throw new OperationalException("取消订单状态失败，参数异常"); }
+        Order order = orderMapper.selectByPrimaryKey(outTradeNo);
+        if(order == null) { throw new OperationalException("取消订单状态失败，订单不存在"); }
+        order.setUpdateTime(new Date());
+        order.setPayStatus("0");
+        // 更新到数据库
+        int i = orderMapper.updateByPrimaryKey(order);
+        if(i<1) { throw new OperationalException("订单取消失败"); }
+
+        // 回滚库存
+
+
+
+
+
+
+
+
+
+    }
+
 
     /**
      * 根据ID查询Order

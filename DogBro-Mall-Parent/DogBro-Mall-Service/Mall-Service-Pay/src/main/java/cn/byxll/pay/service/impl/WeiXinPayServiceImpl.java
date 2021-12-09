@@ -4,6 +4,7 @@ import cn.byxll.pay.service.WeiXinPayService;
 import com.github.wxpay.sdk.WXPayUtil;
 import entity.Result;
 import entity.StatusCode;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,8 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
      * @return 响应数据
      */
     @Override
-    public Result<Boolean> createNative(String outTradeNo, String totalFee) {
+    public Result<Map<String,String>> createNative(String outTradeNo, String totalFee) {
+        if(StringUtils.isEmpty(outTradeNo) || StringUtils.isEmpty(totalFee)) { return new Result<>(false,StatusCode.ARGERROR,"参数异常",null); }
         try {
             //1、封装参数
             HashMap<String,String> param = new HashMap<String,String>(16);
@@ -84,7 +86,47 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
             return new Result<>(true, StatusCode.OK, "创建订单支付二维码成功",dataMap);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "创建订单支付二维码失败");
+            return new Result<>(false, StatusCode.ERROR, "创建订单支付二维码失败",null);
+        }
+    }
+
+    /**
+     * 查询订单状态
+     *
+     * @param outTradeNo 客户端自定义订单编号
+     * @return 响应数据
+     */
+    @Override
+    public Result<Map<String,String>> queryPayStatus(String outTradeNo) {
+        if(StringUtils.isEmpty(outTradeNo)) { return new Result<>(false,StatusCode.ARGERROR,"参数异常",null); }
+        try {
+            //1.封装参数
+            Map<String,String> param = new HashMap(16);
+            // 应用ID
+            param.put("appid",appid);
+            // 商户号
+            param.put("mch_id",partner);
+            // 商户订单编号
+            param.put("out_trade_no",outTradeNo);
+            // 随机字符
+            param.put("nonce_str",WXPayUtil.generateNonceStr());
+
+            //2、将参数转成xml字符，并携带签名
+            String paramXml = WXPayUtil.generateSignedXml(param,partnerkey);
+
+            //3、发送请求
+            HttpClient httpClient = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
+            httpClient.setHttps(true);
+            httpClient.setXmlParam(paramXml);
+            httpClient.post();
+
+            //4、获取返回值，并将返回值转成Map
+            String content = httpClient.getContent();
+            Map<String, String> payMap = WXPayUtil.xmlToMap(content);
+            return new Result<>(true, StatusCode.OK, "获取订单支付状态成功",payMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "获取订单支付状态失败",null);
         }
     }
 }
