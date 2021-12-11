@@ -1,7 +1,6 @@
 package cn.byxll.order.service.impl;
 
 import cn.byxll.goods.feign.SkuFeign;
-import cn.byxll.goods.pojo.Sku;
 import cn.byxll.order.dao.OrderItemMapper;
 import cn.byxll.order.dao.OrderMapper;
 import cn.byxll.order.dto.OrderDto;
@@ -13,6 +12,10 @@ import com.github.pagehelper.PageInfo;
 import entity.Result;
 import entity.StatusCode;
 import exception.OperationalException;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -37,12 +40,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
     private final SkuFeign skuFeign;
     private final RedisTemplate redisTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
-    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, SkuFeign skuFeign, RedisTemplate redisTemplate) {
+    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, SkuFeign skuFeign, RedisTemplate redisTemplate, RabbitTemplate rabbitTemplate) {
         this.orderMapper = orderMapper;
         this.orderItemMapper = orderItemMapper;
         this.skuFeign = skuFeign;
         this.redisTemplate = redisTemplate;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     /**
@@ -113,6 +118,18 @@ public class OrderServiceImpl implements OrderService {
         // 扣除库存
         Result<Boolean> result = skuFeign.decrCount(decrMap);
         if(!result.isFlag()){ throw new OperationalException("创建订单失败");  }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        simpleDateFormat.format("创建订单时间：" + new Date());
+        // 延时队列 触发30分钟超时订单关闭
+        rabbitTemplate.convertAndSend("orderDelayQueue", (Object) order.getId(), new MessagePostProcessor() {
+            @Override
+            public Message postProcessMessage(Message message) throws AmqpException {
+                // 设置属性延时读取
+                message.getMessageProperties().setExpiration("10000");
+                return message;
+            }
+        });
         return new Result<>(true, StatusCode.OK, "操作成功",order);
     }
 
