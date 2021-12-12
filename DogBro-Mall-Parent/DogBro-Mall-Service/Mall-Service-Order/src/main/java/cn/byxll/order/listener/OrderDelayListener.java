@@ -22,6 +22,9 @@ public class OrderDelayListener {
     public void getOrderDelayMessage(String message) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println("监听到订单超时消息："+message);
-        simpleDateFormat.format("监听到订单超时消息时间：" + new Date());
+        System.out.println("监听到订单超时消息时间：" + simpleDateFormat.format( new Date()));
+
+
+
     }
 }

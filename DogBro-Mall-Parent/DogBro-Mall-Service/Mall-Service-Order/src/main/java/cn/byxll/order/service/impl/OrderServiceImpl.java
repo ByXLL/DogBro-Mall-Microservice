@@ -120,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
         if(!result.isFlag()){ throw new OperationalException("创建订单失败");  }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        simpleDateFormat.format("创建订单时间：" + new Date());
+        System.out.println("创建订单时间：" + simpleDateFormat.format(new Date()));
         // 延时队列 触发30分钟超时订单关闭
         rabbitTemplate.convertAndSend("orderDelayQueue", (Object) order.getId(), new MessagePostProcessor() {
             @Override

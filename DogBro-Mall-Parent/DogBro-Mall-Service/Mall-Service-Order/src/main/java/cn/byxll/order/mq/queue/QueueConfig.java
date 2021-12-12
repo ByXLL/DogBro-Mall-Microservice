@@ -29,7 +29,7 @@ public class QueueConfig {
      * 队列二
      * @return
      */
-    @Bean
+    @Bean(name = "orderListenerQueue")
     public Queue orderListenerQueue() {
         return new Queue("orderDelayQueue",true);
     }
@@ -38,7 +38,7 @@ public class QueueConfig {
      * 死信交换机
      * @return
      */
-    @Bean
+    @Bean(name = "orderListenerExchange")
     public Exchange orderListenerExchange() {
         return new DirectExchange("orderListenerExchange");
     }
@@ -48,10 +48,10 @@ public class QueueConfig {
      * @return
      */
     @Bean
-    public Binding orderListenerBinding() {
+    public Binding orderListenerBinding(Queue orderListenerQueue,Exchange orderListenerExchange) {
         return BindingBuilder
-                .bind(orderListenerQueue())
-                .to(orderListenerExchange())
+                .bind(orderListenerQueue)
+                .to(orderListenerExchange)
                 .with("orderListenerExchange")
                 .noargs();
     }
