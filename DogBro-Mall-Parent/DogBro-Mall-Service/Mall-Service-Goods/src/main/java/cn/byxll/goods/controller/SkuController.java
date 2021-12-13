@@ -30,6 +30,7 @@ public class SkuController {
     public Result<Sku> findById(@PathVariable("id") String id) {
         return skuService.findById(id);
     }
+
     /**
      * 减库存
      * @param decrMap   减库存信息
@@ -40,6 +41,15 @@ public class SkuController {
         return skuService.decrCount(decrMap);
     }
 
+    /**
+     * 回滚库存
+     * @param decrMap   库存信息
+     * @return   响应数据
+     */
+    @PostMapping("/collBackCount")
+    public Result<Boolean> collBackInventory(@RequestBody Map<Long,Integer> decrMap) {
+        return skuService.collBackCount(decrMap);
+    }
     /**
      * 查询所有规格
      * @return      响应数据

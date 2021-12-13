@@ -4,6 +4,7 @@ import cn.byxll.goods.feign.SkuFeign;
 import cn.byxll.order.dao.OrderItemMapper;
 import cn.byxll.order.dao.OrderMapper;
 import cn.byxll.order.dto.OrderDto;
+import cn.byxll.order.feign.OrderItemFeign;
 import cn.byxll.order.pojo.Order;
 import cn.byxll.order.pojo.OrderItem;
 import cn.byxll.order.service.OrderService;
@@ -39,13 +40,15 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
     private final SkuFeign skuFeign;
+    private final OrderItemFeign orderItemFeign;
     private final RedisTemplate redisTemplate;
     private final RabbitTemplate rabbitTemplate;
 
-    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, SkuFeign skuFeign, RedisTemplate redisTemplate, RabbitTemplate rabbitTemplate) {
+    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, SkuFeign skuFeign, OrderItemFeign orderItemFeign, RedisTemplate redisTemplate, RabbitTemplate rabbitTemplate) {
         this.orderMapper = orderMapper;
         this.orderItemMapper = orderItemMapper;
         this.skuFeign = skuFeign;
+        this.orderItemFeign = orderItemFeign;
         this.redisTemplate = redisTemplate;
         this.rabbitTemplate = rabbitTemplate;
     }
@@ -197,15 +200,8 @@ public class OrderServiceImpl implements OrderService {
         if(i<1) { throw new OperationalException("订单取消失败"); }
 
         // 回滚库存
-
-
-
-
-
-
-
-
-
+        boolean backInventory = collBackInventory(outTradeNo);
+        if(!backInventory) { throw new OperationalException("取消订单状态失败，商品库存回滚失败"); }
     }
 
 
@@ -400,4 +396,24 @@ public class OrderServiceImpl implements OrderService {
         return example;
     }
 
+    /**
+     * 回滚库存
+     * @param orderId   订单id
+     * @return          是否回滚成功
+     */
+    private boolean collBackInventory(String orderId) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrderId(orderId);
+        Result<List<OrderItem>> orderItemResult = orderItemFeign.findList(orderItem);
+        HashMap<Long,Integer> skuInfoMap = new HashMap<>(16);
+        if(orderItemResult.isFlag()) {
+            List<OrderItem> orderItemList = orderItemResult.getData();
+            if(orderItemList.size()<1) { return false; }
+            for (OrderItem item : orderItemList) {
+                skuInfoMap.put(Long.valueOf(item.getSkuId()), item.getNum());
+            }
+        }
+        Result<Boolean> result = skuFeign.collBackCount(skuInfoMap);
+        return result.isFlag();
+    }
 }

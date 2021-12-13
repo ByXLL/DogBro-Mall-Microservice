@@ -40,4 +40,11 @@ public interface SkuFeign {
     @PostMapping("/decrCount")
     Result<Boolean> decrCount(@RequestBody Map<Long,Integer> decrMap);
 
+    /**
+     * 回滚库存
+     * @param decrMap   库存信息
+     * @return   响应数据
+     */
+    @PostMapping("/collBackCount")
+    Result<Boolean> collBackCount(@RequestBody Map<Long,Integer> decrMap);
 }

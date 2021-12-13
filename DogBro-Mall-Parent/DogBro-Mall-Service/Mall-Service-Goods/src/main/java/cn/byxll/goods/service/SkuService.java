@@ -34,6 +34,14 @@ public interface SkuService {
      * @return        响应数据
      */
     Result<Boolean> decrCount(@RequestBody Map<Long,Integer> decrMap);
+
+    /**
+     * 回滚库存
+     * @param decrMap 库存信息
+     * @return        响应数据
+     */
+    Result<Boolean> collBackCount(@RequestBody Map<Long,Integer> decrMap);
+
     /**
      * 修改Sku数据
      * @param sku  实体

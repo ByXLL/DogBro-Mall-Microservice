@@ -72,6 +72,24 @@ public class SkuServiceImpl implements SkuService {
     }
 
     /**
+     * 回滚库存
+     * @param decrMap 库存信息
+     * @return        响应数据
+     */
+    @Override
+    @Transactional(rollbackFor = OperationalException.class)
+    public Result<Boolean> collBackCount(Map<Long,Integer> decrMap){
+        if(decrMap == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        for (Map.Entry<Long, Integer> entry : decrMap.entrySet()) {
+            Long skuId = entry.getKey();
+            Integer num = entry.getValue();
+            int i = skuMapper.collBackCount(skuId,num);
+            if(i<1) { throw new OperationalException("回滚库存失败"); }
+        }
+        return new Result<>(true, StatusCode.OK, "操作成功");
+    }
+
+    /**
      * 修改Sku
      * @param sku       Sku实体
      * @return          响应数据

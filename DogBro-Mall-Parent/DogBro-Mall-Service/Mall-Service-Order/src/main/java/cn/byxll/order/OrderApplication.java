@@ -15,7 +15,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @author By-Lin
  */
 @SpringBootApplication
-@EnableFeignClients(basePackages = "cn.byxll.goods.feign")
+@EnableFeignClients( value = {"cn.byxll.goods.feign", "cn.byxll.order.feign"})
 @MapperScan(basePackages = {"cn.byxll.order.dao"})
 public class OrderApplication {
 
