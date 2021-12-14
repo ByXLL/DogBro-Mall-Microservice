@@ -31,7 +31,7 @@ public class QueueConfig {
      */
     @Bean(name = "orderListenerQueue")
     public Queue orderListenerQueue() {
-        return new Queue("orderDelayQueue",true);
+        return new Queue("orderListenerQueue",true);
     }
 
     /**

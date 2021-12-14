@@ -19,6 +19,7 @@
         <module>Mall-Service-User</module>
         <module>Mall-Service-Order</module>
         <module>Mall-Service-Pay</module>
+        <module>Mall-Service-Seckill</module>
     </modules>
 
     <properties>

@@ -1,35 +1,32 @@
-package cn.byxll.order;
+package cn.byxll.seckill;
 
-import interceptor.FeignInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import tk.mybatis.spring.annotation.MapperScan;
-
+import utils.IdWorker;
 
 /**
- * 订单微服务启动类
+ * 秒杀微服务启动类
  * @author By-Lin
  */
+@EnableScheduling
 @EnableEurekaClient
+@EnableFeignClients
 @SpringBootApplication
-@EnableFeignClients( value = {"cn.byxll.goods.feign", "cn.byxll.order.feign"})
-@MapperScan(basePackages = {"cn.byxll.order.dao"})
-public class OrderApplication {
+@MapperScan(basePackages = {"cn.byxll.seckill.dao"})
+public class SeckillApplication {
+
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderApplication.class,args);
+        SpringApplication.run(SeckillApplication.class,args);
     }
 
-    /**
-     * 注入feign拦截器注入到容器中
-     * @return
-     */
     @Bean
-    public FeignInterceptor initFeignInterceptor() {
-        return new FeignInterceptor();
+    public IdWorker idWorker(){
+        return new IdWorker(1,1);
     }
-
 }

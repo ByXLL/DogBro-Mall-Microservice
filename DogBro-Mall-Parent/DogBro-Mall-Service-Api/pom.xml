@@ -17,6 +17,7 @@
         <module>Mall-Service-Search-Api</module>
         <module>Mall-Service-User-Api</module>
         <module>Mall-Service-Order-Api</module>
+        <module>Mall-Service-Seckill-Api</module>
     </modules>
 
     <properties>
@@ -42,6 +43,12 @@
             <artifactId>persistence-api</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.2.1</version>
         </dependency>
 
 <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-openfeign-core &ndash;&gt;-->

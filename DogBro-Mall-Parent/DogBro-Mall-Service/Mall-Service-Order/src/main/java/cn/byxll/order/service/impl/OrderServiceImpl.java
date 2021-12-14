@@ -53,6 +53,15 @@ public class OrderServiceImpl implements OrderService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+
+//    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, SkuFeign skuFeign, RedisTemplate redisTemplate, RabbitTemplate rabbitTemplate) {
+//        this.orderMapper = orderMapper;
+//        this.orderItemMapper = orderItemMapper;
+//        this.skuFeign = skuFeign;
+//        this.redisTemplate = redisTemplate;
+//        this.rabbitTemplate = rabbitTemplate;
+//    }
+
     /**
      * 新增Order
      * @param orderDto       Order dto实体
@@ -415,5 +424,6 @@ public class OrderServiceImpl implements OrderService {
         }
         Result<Boolean> result = skuFeign.collBackCount(skuInfoMap);
         return result.isFlag();
+//        return false;
     }
 }

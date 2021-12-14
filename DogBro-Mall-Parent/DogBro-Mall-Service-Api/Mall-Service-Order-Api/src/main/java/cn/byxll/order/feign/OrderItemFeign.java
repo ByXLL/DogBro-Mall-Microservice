@@ -14,9 +14,13 @@ import java.util.List;
  * @author By-Lin
  */
 @FeignClient(value = "order")
-@RequestMapping("/orderItem")
 public interface OrderItemFeign {
 
-    @PostMapping("/search")
+    /**
+     * 多条件搜索品牌数据
+     * @param orderItem     OrderItem实体
+     * @return              响应数据
+     */
+    @PostMapping("/orderItem/search")
     Result<List<OrderItem>> findList(@RequestBody OrderItem orderItem);
 }
