@@ -2,15 +2,21 @@ package cn.byxll.seckill.service.impl;
 
 import cn.byxll.seckill.dao.SeckillGoodsMapper;
 import cn.byxll.seckill.pojo.SeckillGoods;
+import cn.byxll.seckill.pojo.SeckillOrder;
 import cn.byxll.seckill.service.SeckillGoodsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import entity.StatusCode;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import tk.mybatis.mapper.entity.Example;
+import utils.DateUtil;
 
+import javax.websocket.server.PathParam;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,9 +26,11 @@ import java.util.List;
 @Service
 public class SeckillGoodsServiceImpl implements SeckillGoodsService {
 
+    private final RedisTemplate redisTemplate;
     private final SeckillGoodsMapper seckillGoodsMapper;
 
-    public SeckillGoodsServiceImpl(SeckillGoodsMapper seckillGoodsMapper) {
+    public SeckillGoodsServiceImpl(RedisTemplate redisTemplate, SeckillGoodsMapper seckillGoodsMapper) {
+        this.redisTemplate = redisTemplate;
         this.seckillGoodsMapper = seckillGoodsMapper;
     }
 
@@ -134,6 +142,42 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
         return new Result<>(true, StatusCode.OK, "操作成功", new PageInfo<SeckillGoods>(seckillGoodsMapper.selectByExample(example)));
     }
 
+    /**
+     * 获取秒杀 menus
+     * @return 响应数据
+     */
+    @Override
+    public Result<List<Date>> findSeckillMenus() {
+        List<Date> dateMenus = DateUtil.getDateMenus();
+        return new Result<>(true,StatusCode.OK, "获取秒杀时间菜单成功",dateMenus);
+    }
+
+    /**
+     * 根据当前时间获取秒杀商品列表
+     *
+     * @param time 当前时间
+     * @return 响应数据
+     */
+    @Override
+    public Result<List<SeckillGoods>> findNowSeckillGoodsList(String time) {
+        if(StringUtils.isEmpty(time)) { return new Result<>(false,StatusCode.ARGERROR,"参数异常"); }
+        List<SeckillGoods> values = redisTemplate.boundHashOps("SeckillGoods_" + time).values();
+        return new Result<>(true,StatusCode.OK,"秒杀商品查询成功",values);
+    }
+
+    /**
+     * 查询秒杀商品详情
+     *
+     * @param time 当前秒杀时间段
+     * @param id   秒杀商品id
+     * @return 响应数据
+     */
+    @Override
+    public Result<SeckillGoods> findOne(String time, Long id) {
+        if(StringUtils.isEmpty(time) || id == null) { return new Result<>(false,StatusCode.ARGERROR,"参数异常"); }
+        SeckillGoods seckillGoods = (SeckillGoods) redisTemplate.boundHashOps("SeckillGoods_" + time).get(id);
+        return new Result<>(true,StatusCode.OK,"秒杀商品查询成功",seckillGoods);
+    }
 
     /**
      * SeckillGoods构建查询对象

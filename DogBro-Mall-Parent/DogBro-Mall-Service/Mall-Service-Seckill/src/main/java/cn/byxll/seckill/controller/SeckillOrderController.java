@@ -1,11 +1,13 @@
 package cn.byxll.seckill.controller;
 
+import cn.byxll.seckill.pojo.SeckillGoods;
 import cn.byxll.seckill.pojo.SeckillOrder;
 import cn.byxll.seckill.service.impl.SeckillOrderServiceImpl;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 /**
@@ -25,13 +27,14 @@ public class SeckillOrderController {
     }
 
     /**
-     * 新增SeckillOrder数据
-     * @param seckillOrder      SeckillOrder实体
-     * @return              响应数据
+     * 添加秒杀订单
+     * @param time      当前时间
+     * @param id        秒杀商品id
+     * @return          响应数据
      */
     @PostMapping("/add")
-    public Result<Boolean> add(@RequestBody SeckillOrder seckillOrder){
-        return seckillOrderService.add(seckillOrder);
+    public Result<Boolean> add(String time, Long id){
+        return seckillOrderService.add(time,id);
     }
 
     /**

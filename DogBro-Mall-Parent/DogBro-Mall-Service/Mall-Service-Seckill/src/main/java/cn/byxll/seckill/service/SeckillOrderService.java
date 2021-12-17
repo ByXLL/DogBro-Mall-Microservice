@@ -13,11 +13,12 @@ import java.util.List;
 public interface SeckillOrderService {
 
     /**
-     * 新增SeckillOrder
-     * @param   seckillOrder      SeckillOrder实体
-     * @return                 响应数据
+     * 添加秒杀订单
+     * @param time          当前时间
+     * @param id            秒杀商品id
+     * @return              响应数据
      */
-    Result<Boolean> add(SeckillOrder seckillOrder);
+    Result<Boolean> add(String time, Long id);
 
     /**
      * 通过组件删除SeckillOrder

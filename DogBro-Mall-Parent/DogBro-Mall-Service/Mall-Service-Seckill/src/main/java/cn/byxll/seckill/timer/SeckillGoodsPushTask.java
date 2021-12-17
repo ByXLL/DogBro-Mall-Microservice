@@ -17,7 +17,7 @@ import java.util.Set;
  * 定时将秒杀商品存入到Redis缓存
  * @author By-Lin
  */
-@Component
+//@Component
 public class SeckillGoodsPushTask {
     private final SeckillGoodsMapper seckillGoodsMapper;
     private final RedisTemplate redisTemplate;

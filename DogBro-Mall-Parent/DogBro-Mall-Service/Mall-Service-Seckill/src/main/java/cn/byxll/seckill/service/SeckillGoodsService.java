@@ -4,6 +4,7 @@ import cn.byxll.seckill.pojo.SeckillGoods;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,4 +71,25 @@ public interface SeckillGoodsService {
      * @return              响应数据
      */
     Result<List<SeckillGoods>> findList(SeckillGoods seckillGoods);
+
+    /**
+     * 获取秒杀 menus
+     * @return  响应数据
+     */
+    Result<List<Date>> findSeckillMenus();
+
+    /**
+     * 根据当前时间获取秒杀商品列表
+     * @param time      当前时间
+     * @return          响应数据
+     */
+    Result<List<SeckillGoods>> findNowSeckillGoodsList(String time);
+
+    /**
+     * 查询秒杀商品详情
+     * @param time      当前秒杀时间段
+     * @param id        秒杀商品id
+     * @return          响应数据
+     */
+    Result<SeckillGoods> findOne(String time, Long id);
 }

@@ -6,6 +6,8 @@ import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -107,4 +109,27 @@ public class SeckillGoodsController {
         return seckillGoodsService.findPagerByParam(seckillGoods, page, pageSize);
     }
 
+    /**
+     * 获取秒杀 menus
+     * @return  响应数据
+     */
+    @GetMapping("/getMenus")
+    public Result<List<Date>> getSeckillMenus() {
+        return seckillGoodsService.findSeckillMenus();
+    }
+
+    /**
+     * 根据当前时间获取秒杀商品列表
+     * @param time      当前时间  格式：2021010112
+     * @return          响应数据
+     */
+    @GetMapping("/getSeckillGoodsList")
+    public Result<List<SeckillGoods>> getNowSeckillGoodsList(@PathParam("time") String time) {
+        return seckillGoodsService.findNowSeckillGoodsList(time);
+    }
+
+    @GetMapping("/findOne")
+    public Result<SeckillGoods> findOne(@PathParam("time") String time, @PathParam("id") Long id) {
+        return seckillGoodsService.findOne(time,id);
+    }
 }
