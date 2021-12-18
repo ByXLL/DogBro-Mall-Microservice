@@ -2,9 +2,9 @@ package cn.byxll.seckill.service.impl;
 
 import cn.byxll.seckill.dao.SeckillGoodsMapper;
 import cn.byxll.seckill.dao.SeckillOrderMapper;
-import cn.byxll.seckill.pojo.SeckillGoods;
 import cn.byxll.seckill.pojo.SeckillOrder;
 import cn.byxll.seckill.service.SeckillOrderService;
+import cn.byxll.seckill.task.MultiThreadingCreateOrder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
@@ -13,9 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
-import utils.IdWorker;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,11 +26,13 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     private final RedisTemplate redisTemplate;
     private final SeckillGoodsMapper seckillGoodsMapper;
     private final SeckillOrderMapper seckillOrderMapper;
+    private final MultiThreadingCreateOrder multiThreadingCreateOrder;
 
-    public SeckillOrderServiceImpl(RedisTemplate redisTemplate, SeckillGoodsMapper seckillGoodsMapper, SeckillOrderMapper seckillOrderMapper) {
+    public SeckillOrderServiceImpl(RedisTemplate redisTemplate, SeckillGoodsMapper seckillGoodsMapper, SeckillOrderMapper seckillOrderMapper, MultiThreadingCreateOrder multiThreadingCreateOrder) {
         this.redisTemplate = redisTemplate;
         this.seckillGoodsMapper = seckillGoodsMapper;
         this.seckillOrderMapper = seckillOrderMapper;
+        this.multiThreadingCreateOrder = multiThreadingCreateOrder;
     }
 
     /**
@@ -45,47 +45,48 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     @Override
     public Result<Boolean> add(String time, Long id) {
         if(StringUtils.isEmpty(time) || id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
-        IdWorker idWorker = new IdWorker();
-        String userName = "zhangsan";
-        String nameSpace = "SeckillGoods_" + time;
-        SeckillGoods seckillGoods = (SeckillGoods) redisTemplate.boundHashOps(nameSpace).get(id);
-        if (seckillGoods == null || seckillGoods.getStockCount() <= 0) {
-            return new Result<>(false,StatusCode.ERROR,"商品已经抢完了",false);
-        }
-        SeckillOrder seckillOrder = new SeckillOrder();
-        seckillOrder.setId(idWorker.nextId());
-        seckillOrder.setSeckillId(id);
-        seckillOrder.setMoney(seckillGoods.getCostPrice());
-        seckillOrder.setUserId(userName);
-        seckillOrder.setCreateTime(new Date());
-        seckillOrder.setStatus("0");
-//        int i = seckillOrderMapper.insert(seckillOrder);
-
-        /**
-         * 将订单信息存储起来
-         * 一个用户只能有一个未支付秒杀订单
-         * 订单存入redis
-         * Hash
-         *      nameSpace -> SeckillOrder
-         *                      userName: SeckillOrder
-         */
-        redisTemplate.boundHashOps("SeckillOrder").put(userName,seckillOrder);
-
-        /**
-         * 库存递减 redis中保存的商品信息中的商品个数递减
-         * 如果递减了是最后一个，则直接将redis中的商品信息进行删除
-         * 同步redis中商品信息到mysql中
-         */
-        seckillGoods.setStockCount(seckillGoods.getStockCount()-1);
-        if(seckillGoods.getStockCount() <= 0) {
-            // 同步到mysql
-            int i1 = seckillGoodsMapper.updateByPrimaryKeySelective(seckillGoods);
-            // 移除Redis中的商品信息
-            redisTemplate.boundHashOps(nameSpace).delete(id);
-        }else {
-            // 同步到redis
-            redisTemplate.boundHashOps(nameSpace).put(id,seckillGoods);
-        }
+        multiThreadingCreateOrder.createOrder();
+        //        IdWorker idWorker = new IdWorker();
+//        String userName = "zhangsan";
+//        String nameSpace = "SeckillGoods_" + time;
+//        SeckillGoods seckillGoods = (SeckillGoods) redisTemplate.boundHashOps(nameSpace).get(id);
+//        if (seckillGoods == null || seckillGoods.getStockCount() <= 0) {
+//            return new Result<>(false,StatusCode.ERROR,"商品已经抢完了",false);
+//        }
+//        SeckillOrder seckillOrder = new SeckillOrder();
+//        seckillOrder.setId(idWorker.nextId());
+//        seckillOrder.setSeckillId(id);
+//        seckillOrder.setMoney(seckillGoods.getCostPrice());
+//        seckillOrder.setUserId(userName);
+//        seckillOrder.setCreateTime(new Date());
+//        seckillOrder.setStatus("0");
+////        int i = seckillOrderMapper.insert(seckillOrder);
+//
+//        /**
+//         * 将订单信息存储起来
+//         * 一个用户只能有一个未支付秒杀订单
+//         * 订单存入redis
+//         * Hash
+//         *      nameSpace -> SeckillOrder
+//         *                      userName: SeckillOrder
+//         */
+//        redisTemplate.boundHashOps("SeckillOrder").put(userName,seckillOrder);
+//
+//        /**
+//         * 库存递减 redis中保存的商品信息中的商品个数递减
+//         * 如果递减了是最后一个，则直接将redis中的商品信息进行删除
+//         * 同步redis中商品信息到mysql中
+//         */
+//        seckillGoods.setStockCount(seckillGoods.getStockCount()-1);
+//        if(seckillGoods.getStockCount() <= 0) {
+//            // 同步到mysql
+//            int i1 = seckillGoodsMapper.updateByPrimaryKeySelective(seckillGoods);
+//            // 移除Redis中的商品信息
+//            redisTemplate.boundHashOps(nameSpace).delete(id);
+//        }else {
+//            // 同步到redis
+//            redisTemplate.boundHashOps(nameSpace).put(id,seckillGoods);
+//        }
         return new Result<>(true, StatusCode.OK, "下单成功");
 //        if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
 //        return new Result<>(false, StatusCode.ERROR, "操作失败");
