@@ -71,4 +71,10 @@ public interface SeckillOrderService {
      * @return              响应数据
      */
     Result<List<SeckillOrder>> findList(SeckillOrder seckillOrder);
+
+    /**
+     * 订单状态查询
+     * @return              响应数据
+     */
+    Result<SeckillOrder> queryStatus();
 }

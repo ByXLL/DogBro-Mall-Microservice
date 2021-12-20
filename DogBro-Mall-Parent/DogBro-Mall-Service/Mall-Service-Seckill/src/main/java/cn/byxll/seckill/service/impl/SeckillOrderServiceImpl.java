@@ -8,12 +8,14 @@ import cn.byxll.seckill.task.MultiThreadingCreateOrder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
+import entity.SeckillStatus;
 import entity.StatusCode;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,7 +46,14 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
      */
     @Override
     public Result<Boolean> add(String time, Long id) {
-        if(StringUtils.isEmpty(time) || id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        String userName = "zhangsan";
+        if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(time) || id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        // 创建排队对象
+        SeckillStatus seckillStatus = new SeckillStatus(userName, new Date(), 1, id, time);
+        // 将用户抢单信息存入redis队列
+        redisTemplate.boundListOps("SeckillOrderQueue").leftPush(seckillStatus);
+        // 用户抢单状态存入Redis -> 用于查询
+        redisTemplate.boundHashOps("UserQueueStatus").put(userName,seckillStatus);
         multiThreadingCreateOrder.createOrder();
         //        IdWorker idWorker = new IdWorker();
 //        String userName = "zhangsan";
@@ -87,7 +96,7 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
 //            // 同步到redis
 //            redisTemplate.boundHashOps(nameSpace).put(id,seckillGoods);
 //        }
-        return new Result<>(true, StatusCode.OK, "下单成功");
+        return new Result<>(true, StatusCode.OK, "正在排队中...");
 //        if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
 //        return new Result<>(false, StatusCode.ERROR, "操作失败");
     }
@@ -188,6 +197,20 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     }
 
     /**
+     * 订单状态查询
+     * @return 响应数据
+     */
+    @Override
+    public Result<SeckillOrder> queryStatus() {
+        String userName = "zhangsan";
+        if (StringUtils.isEmpty(userName)) {  return new Result<>(false, StatusCode.ARGERROR, "参数异常",null);  }
+        // 根据用户名去Redis 用户抢单状态队列中查询
+        SeckillStatus seckillStatus = (SeckillStatus) redisTemplate.boundHashOps("UserQueueStatus").get(userName);
+        if(seckillStatus != null) { return new Result<>(true, StatusCode.OK, "状态查询成功",seckillStatus); }
+        return new Result<>(false, StatusCode.NOTFOUNDERROR, "抢单失败",null);
+    }
+
+    /**
      * SeckillOrder构建查询对象
      * @param seckillOrder      SeckillOrder实体
      * @return              查询对象
@@ -197,11 +220,11 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         Example.Criteria criteria = example.createCriteria();
         if(seckillOrder!=null){
             // 主键
-            if(!StringUtils.isEmpty(seckillOrder.getId())){
+            if(seckillOrder.getId() != null){
                 criteria.andEqualTo("id",seckillOrder.getId());
             }
             // 秒杀商品ID
-            if(!StringUtils.isEmpty(seckillOrder.getSeckillId())){
+            if(seckillOrder.getSeckillId() != null){
                 criteria.andEqualTo("seckillId",seckillOrder.getSeckillId());
             }
             // 支付金额
@@ -217,11 +240,11 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
                 criteria.andEqualTo("sellerId",seckillOrder.getSellerId());
             }
             // 创建时间
-            if(!StringUtils.isEmpty(seckillOrder.getCreateTime())){
+            if(!StringUtils.isEmpty(String.valueOf(seckillOrder.getCreateTime()))){
                 criteria.andEqualTo("createTime",seckillOrder.getCreateTime());
             }
             // 支付时间
-            if(!StringUtils.isEmpty(seckillOrder.getPayTime())){
+            if(!StringUtils.isEmpty(String.valueOf(seckillOrder.getPayTime()))){
                 criteria.andEqualTo("payTime",seckillOrder.getPayTime());
             }
             // 状态，0未支付，1已支付

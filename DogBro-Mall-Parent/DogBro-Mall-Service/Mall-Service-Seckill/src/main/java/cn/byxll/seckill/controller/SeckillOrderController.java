@@ -110,4 +110,12 @@ public class SeckillOrderController {
         return seckillOrderService.findPagerByParam(seckillOrder, page, pageSize);
     }
 
+    /**
+     * 查询订单状态
+     * @return 响应数据
+     */
+    @GetMapping("/query")
+    public Result<SeckillOrder> queryStatus() {
+        return seckillOrderService.queryStatus();
+    }
 }
