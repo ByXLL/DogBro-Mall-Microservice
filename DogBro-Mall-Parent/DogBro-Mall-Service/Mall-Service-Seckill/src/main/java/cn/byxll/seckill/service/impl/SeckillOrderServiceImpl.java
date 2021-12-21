@@ -48,6 +48,9 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     public Result<Boolean> add(String time, Long id) {
         String userName = "zhangsan";
         if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(time) || id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        // 记录用户排队次数 用于限制一个用户只能抢购一个  increment(key,递增的值)
+        Long userQueueCount = redisTemplate.boundHashOps("UserQueueCount").increment(userName, 1);
+        if(userQueueCount >1) { return new Result<>(false,StatusCode.ERROR,"抢购失败，禁止重复抢单！",null); }
         // 创建排队对象
         SeckillStatus seckillStatus = new SeckillStatus(userName, new Date(), 1, id, time);
         // 将用户抢单信息存入redis队列
