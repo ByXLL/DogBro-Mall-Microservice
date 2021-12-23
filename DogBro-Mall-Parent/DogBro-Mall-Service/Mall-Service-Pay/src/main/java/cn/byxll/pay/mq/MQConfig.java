@@ -26,16 +26,17 @@ public class MQConfig {
     }
 
     /**
-     * 创建队列
+     * 创建普通订单队列
      * @return
      */
-    @Bean(name = "queueOrder")
+//    @Bean(name = "queueOrder")
+    @Bean
     public Queue orderQueue(){
         return new Queue(Objects.requireNonNull(env.getProperty("mq.pay.queue.order")), true);
     }
 
     /**
-     * 创建DirectExchange交换机
+     * 创建普通订单DirectExchange交换机
      * @return
      */
     @Bean
@@ -45,11 +46,41 @@ public class MQConfig {
 
 
     /**
-     * 队列绑定到交换机上
+     * 创建普通订单队列绑定到交换机上
      * @return
      */
     @Bean
     public Binding orderExchangeBinding(){
         return BindingBuilder.bind(orderQueue()).to(orderExchange()).with(env.getProperty("mq.pay.routing.key"));
+    }
+
+
+
+    /**
+     * 创建秒杀订单队列
+     * @return
+     */
+    @Bean
+    public Queue seckillOrderQueue(){
+        return new Queue(Objects.requireNonNull(env.getProperty("mq.pay.queue.seckillOrder")), true);
+    }
+
+    /**
+     * 创建秒杀订单DirectExchange交换机
+     * @return
+     */
+    @Bean
+    public DirectExchange seckillOrderExchange(){
+        return new DirectExchange(env.getProperty("mq.pay.exchange.seckillOrder"), true,false);
+    }
+
+
+    /**
+     * 创建秒杀订单队列绑定到交换机上
+     * @return
+     */
+    @Bean
+    public Binding seckillOrderExchangeBinding(){
+        return BindingBuilder.bind(seckillOrderQueue()).to(orderExchange()).with(env.getProperty("mq.pay.routing.seckillOrderKey"));
     }
 }

@@ -32,11 +32,23 @@ public class WeiXinPayController {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    /**
+     * 创建二维码
+     * @param outTradeNo     订单编号
+     * @param money          订单金额
+     * @param orderType      订单类型 1->正常订单 2->秒杀订单
+     * @return               响应数据
+     */
     @RequestMapping("/createQRCode")
-    public Result<Map<String,String>> createQRCode(String outTradeNo, String money) {
-        return weiXinPayService.createNative(outTradeNo,money);
+    public Result<Map<String,String>> createQRCode(String outTradeNo, String money, Integer orderType) {
+        return weiXinPayService.createNative(outTradeNo,money,orderType);
     }
 
+    /**
+     * 查询订单支付状态
+     * @param outTradeNo        订单编号
+     * @return                  响应数据
+     */
     @GetMapping(value = "/queryStatus")
     public Result<Map<String,String>> queryStatus(String outTradeNo){
         return weiXinPayService.queryPayStatus(outTradeNo);
@@ -67,8 +79,15 @@ public class WeiXinPayController {
             System.out.println("微信回调数据: "+result);
             //将xml字符串转换成Map结构
             Map<String, String> map = WXPayUtil.xmlToMap(result);
+
+            // 获取自定义的参数中的 MQ 的参数
+            String attachStr = map.get("attach");
+            Map<String,String> attachMap = JSON.parseObject(attachStr,Map.class);
+            String exchange = attachMap.get("exchange");
+            String routingKey = attachMap.get("routingKey");
+
             // 发送MQ
-            rabbitTemplate.convertAndSend("exchange.order","queue.order", JSON.toJSONString(map));
+            rabbitTemplate.convertAndSend(exchange,routingKey, JSON.toJSONString(map));
 
             //响应数据设置
             Map<String,String> respMap = new HashMap<String,String >(16);

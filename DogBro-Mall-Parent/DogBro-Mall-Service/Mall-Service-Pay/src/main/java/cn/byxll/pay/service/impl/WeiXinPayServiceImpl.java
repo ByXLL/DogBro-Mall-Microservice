@@ -1,6 +1,7 @@
 package cn.byxll.pay.service.impl;
 
 import cn.byxll.pay.service.WeiXinPayService;
+import com.alibaba.fastjson.JSON;
 import com.github.wxpay.sdk.WXPayUtil;
 import entity.Result;
 import entity.StatusCode;
@@ -32,14 +33,54 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
     private String notifyurl;
 
     /**
+     * 普通订单 MQ 交换机
+     */
+    @Value("${mq.pay.exchange.order}")
+    private String orderExchange;
+
+    /**
+     * 普通订单 MQ 队列
+     */
+    @Value("${mq.pay.queue.order}")
+    private String orderQueue;
+
+    /**
+     * 普通订单 MQ 路由key
+     */
+    @Value("${mq.pay.routing.key}")
+    private String orderRoutingKey;
+
+    /**
+     * 秒杀订单 MQ 交换机
+     */
+    @Value("${mq.pay.exchange.seckillOrder}")
+    private String seckillOrderExchange;
+
+    /**
+     * 秒杀订单 MQ 队列
+     */
+    @Value("${mq.pay.queue.seckillOrder}")
+    private String seckillOrderQueue;
+
+    /**
+     * 秒杀订单 MQ 路由key
+     */
+    @Value("${mq.pay.routing.seckillOrderKey}")
+    private String seckillOrderRoutingKey;
+
+
+
+    /**
      * 创建二维码
      * @param outTradeNo 客户端自定义订单编号
      * @param totalFee   交易金额,单位：分
+     * @param orderType  订单类型 1->正常订单 2->秒杀订单
      * @return 响应数据
      */
     @Override
-    public Result<Map<String,String>> createNative(String outTradeNo, String totalFee) {
+    public Result<Map<String,String>> createNative(String outTradeNo, String totalFee, Integer orderType) {
         if(StringUtils.isEmpty(outTradeNo) || StringUtils.isEmpty(totalFee)) { return new Result<>(false,StatusCode.ARGERROR,"参数异常",null); }
+        if(orderType == null || orderType != 1 || orderType !=2 ) { return new Result<>(false,StatusCode.ARGERROR,"参数异常,订单类型参数异常",null); }
         try {
             //1、封装参数
             HashMap<String,String> param = new HashMap<String,String>(16);
@@ -61,6 +102,12 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
             param.put("notify_url", notifyurl);
             // 交易类型
             param.put("trade_type", "NATIVE");
+            // 自定义数据 用于回传给 mq 区别普通订单和秒杀订单
+            Map<String,String> attachMap = new HashMap<>(16);
+            attachMap.put("exchange", orderType == 1 ? orderExchange : seckillOrderExchange);
+            attachMap.put("routingKey",orderType == 1 ? orderRoutingKey : seckillOrderRoutingKey);
+            String attachStr = JSON.toJSONString(attachMap);
+            param.put("attach",attachStr);
 
             //2、将参数转成xml字符，并携带签名
             String paramXml = WXPayUtil.generateSignedXml(param, partnerkey);

@@ -41,8 +41,11 @@ hystrix:
 mq:
   pay:
     exchange:
-      order: exchange.order   # 发送的交换机
+      order: exchange.order   # 普通订单发送的交换机
+      seckillOrder: exchange.seckillOrder  # 秒杀订单发送的交换机
     queue:
-      order: queue.order    # 队列名称
+      order: queue.order    # 普通订单的队列名称
+      seckillOrder: queue.seckillOrder    # 秒杀订单的队列名称
     routing:
       key: queue.order
+      seckillOrderKey: queue.seckillOrder
