@@ -16,9 +16,10 @@ public interface SeckillOrderService {
      * 添加秒杀订单
      * @param time          当前时间
      * @param id            秒杀商品id
+     * @param userName      用户名
      * @return              响应数据
      */
-    Result<Boolean> add(String time, Long id);
+    Result<Boolean> add(String time, Long id, String userName);
 
     /**
      * 通过组件删除SeckillOrder

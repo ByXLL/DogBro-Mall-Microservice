@@ -42,21 +42,22 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
      *
      * @param time 当前时间
      * @param id   秒杀商品id
+     * @param userName 用户名
      * @return 响应数据
      */
     @Override
-    public Result<Boolean> add(String time, Long id) {
-        String userName = "zhangsan";
+    public Result<Boolean> add(String time, Long id, String userName) {
         if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(time) || id == null) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
         // 记录用户排队次数 用于限制一个用户只能抢购一个  increment(key,递增的值)
         Long userQueueCount = redisTemplate.boundHashOps("UserQueueCount").increment(userName, 1);
         if(userQueueCount >1) { return new Result<>(false,StatusCode.ERROR,"抢购失败，禁止重复抢单！",null); }
         // 创建排队对象
         SeckillStatus seckillStatus = new SeckillStatus(userName, new Date(), 1, id, time);
-        // 将用户抢单信息存入redis队列
+        // 将用户抢单信息存入redis队列  有个问题 需要设置超时时间
         redisTemplate.boundListOps("SeckillOrderQueue").leftPush(seckillStatus);
         // 用户抢单状态存入Redis -> 用于查询
         redisTemplate.boundHashOps("UserQueueStatus").put(userName,seckillStatus);
+        // 多线程执行抢单
         multiThreadingCreateOrder.createOrder();
         //        IdWorker idWorker = new IdWorker();
 //        String userName = "zhangsan";

@@ -30,11 +30,12 @@ public class SeckillOrderController {
      * 添加秒杀订单
      * @param time      当前时间
      * @param id        秒杀商品id
+     * @param userName  用户名
      * @return          响应数据
      */
     @PostMapping("/add")
-    public Result<Boolean> add(String time, Long id){
-        return seckillOrderService.add(time,id);
+    public Result<Boolean> add(String time, Long id, String userName){
+        return seckillOrderService.add(time,id,userName);
     }
 
     /**

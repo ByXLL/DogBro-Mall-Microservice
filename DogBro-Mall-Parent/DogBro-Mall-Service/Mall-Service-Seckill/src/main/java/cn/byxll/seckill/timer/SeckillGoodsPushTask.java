@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 import utils.DateUtil;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +18,7 @@ import java.util.Set;
  * 定时将秒杀商品存入到Redis缓存
  * @author By-Lin
  */
-//@Component
+@Component
 public class SeckillGoodsPushTask {
     private final SeckillGoodsMapper seckillGoodsMapper;
     private final RedisTemplate redisTemplate;
@@ -67,7 +68,22 @@ public class SeckillGoodsPushTask {
                 // 4、 存入redis
                 redisTemplate.boundHashOps(timeSpace).put(seckillGoods.getId(),seckillGoods);
                 System.out.println("商品ID："+seckillGoods.getId()+"----存入到了Redis---"+timeSpace);
+                // 给每一个商品做个队列 队列中存放 n个数 n=商品的个数 用于在下单的时候做库存校验，解决并发下库存超卖问题
+                Long[] allIdS = putAllIdS(seckillGoods.getId(), seckillGoods.getStockCount());
+                redisTemplate.boundListOps("SeckillGoodsCountList_"+seckillGoods.getId()).leftPush(allIdS);
             }
         }
+    }
+
+    /**
+     *  获取每个秒杀商品的的ID集合
+     * @param goodsId       秒杀商品id
+     * @param num           商品个数
+     * @return              个数数组
+     */
+    public Long[] putAllIdS(Long goodsId, Integer num) {
+        Long[] ids = new Long[num];
+        Arrays.fill(ids, goodsId);
+        return ids;
     }
 }
