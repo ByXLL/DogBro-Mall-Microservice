@@ -37,11 +37,12 @@ public class WeiXinPayController {
      * @param outTradeNo     订单编号
      * @param money          订单金额
      * @param orderType      订单类型 1->正常订单 2->秒杀订单
+     * @param userName       用户名
      * @return               响应数据
      */
     @RequestMapping("/createQRCode")
-    public Result<Map<String,String>> createQRCode(String outTradeNo, String money, Integer orderType) {
-        return weiXinPayService.createNative(outTradeNo,money,orderType);
+    public Result<Map<String,String>> createQRCode(String outTradeNo, String money, Integer orderType, String userName) {
+        return weiXinPayService.createNative(outTradeNo,money,orderType, userName);
     }
 
     /**

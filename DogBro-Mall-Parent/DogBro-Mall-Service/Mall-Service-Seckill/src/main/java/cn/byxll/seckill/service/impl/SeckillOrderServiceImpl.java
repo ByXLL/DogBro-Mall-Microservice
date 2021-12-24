@@ -2,6 +2,7 @@ package cn.byxll.seckill.service.impl;
 
 import cn.byxll.seckill.dao.SeckillGoodsMapper;
 import cn.byxll.seckill.dao.SeckillOrderMapper;
+import cn.byxll.seckill.pojo.SeckillGoods;
 import cn.byxll.seckill.pojo.SeckillOrder;
 import cn.byxll.seckill.service.SeckillOrderService;
 import cn.byxll.seckill.task.MultiThreadingCreateOrder;
@@ -10,11 +11,14 @@ import com.github.pagehelper.PageInfo;
 import entity.Result;
 import entity.SeckillStatus;
 import entity.StatusCode;
+import exception.OperationalException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -119,6 +123,44 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     }
 
     /**
+     * 通过用户名删除订单
+     * @param userName 用户名
+     * @return 响应数据
+     */
+    @Override
+    public Result<Boolean> deleteOrderByUserName(String userName) {
+        if(StringUtils.isEmpty(userName)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        // 查询用户排队信息
+        SeckillStatus seckillStatus = (SeckillStatus) redisTemplate.boundHashOps("UserQueueStatus").get(userName);
+        // 删除redis中的订单
+        redisTemplate.boundHashOps("SeckillOrder").delete(userName);
+        // 删除用户排队信息
+        clearUserQueue(userName);
+        // region 回滚库存
+        String nameSpace = "SeckillGoods_" + seckillStatus.getTime();
+        SeckillGoods seckillGoods = (SeckillGoods) redisTemplate.boundHashOps(nameSpace).get(seckillStatus.getGoodsId());
+
+        // 如果商品为空
+        if(seckillGoods == null) {
+            // 从数据库中查询
+            seckillGoods = seckillGoodsMapper.selectByPrimaryKey(seckillStatus.getGoodsId());
+            if(seckillGoods == null) { throw new OperationalException("删除订单失败");}
+            // 更新数据库中的数据
+            seckillGoods.setStockCount(seckillGoods.getStockCount()+1);
+            seckillGoodsMapper.updateByPrimaryKeySelective(seckillGoods);
+        }else {
+            seckillGoods.setStockCount(seckillGoods.getStockCount()+1);
+        }
+        // 同步到redis缓存
+        redisTemplate.boundHashOps(nameSpace).put(seckillGoods.getId(),seckillGoods);
+        // endregion
+
+        // 商品队列添加一个
+        redisTemplate.boundListOps("SeckillGoodsCountList_"+seckillGoods.getId()).leftPush(seckillGoods.getId());
+        return null;
+    }
+
+    /**
      * 修改SeckillOrder
      * @param seckillOrder      SeckillOrder实体
      * @return              响应数据
@@ -129,6 +171,39 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         int i = seckillOrderMapper.updateByPrimaryKey(seckillOrder);
         if(i>0) { return new Result<>(true, StatusCode.OK, "操作成功"); }
         return new Result<>(false, StatusCode.ERROR, "操作失败");
+    }
+
+    /**
+     * 修改秒杀订单 支付状态
+     *
+     * @param userName      用户名
+     * @param transactionId 交易流水号
+     * @param payTime       支付时间
+     * @return 响应数据
+     */
+    @Override
+    public Result<Boolean> updatePayStatus(String userName, String transactionId, String payTime) {
+        if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(transactionId) || StringUtils.isEmpty(payTime)) { return new Result<>(false, StatusCode.ARGERROR, "参数异常"); }
+        try {
+            SeckillOrder seckillOrder = (SeckillOrder) redisTemplate.boundHashOps("SeckillOrder").get(userName);
+            if(seckillOrder == null) { return new Result<>(false,StatusCode.ERROR,"修改订单失败"); }
+            // 修改订单状态
+            seckillOrder.setTransactionId(transactionId);
+            seckillOrder.setStatus("1");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            seckillOrder.setPayTime(simpleDateFormat.parse(payTime));
+            int i = seckillOrderMapper.insertSelective(seckillOrder);
+            // 删除redis中的订单
+            redisTemplate.boundHashOps("SeckillOrder").delete(userName);
+            // 删除用户的抢单信息
+            clearUserQueue(userName);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        // 清理用户排队信息
+        return null;
     }
 
     /**
@@ -275,4 +350,15 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         return example;
     }
 
+
+    /**
+     * 清理用户的排队和抢单信息
+     * @param userName      用户名
+     */
+    private void clearUserQueue(String userName) {
+        // 清空当前用户的排队次数
+        redisTemplate.boundHashOps("UserQueueCount").delete(userName);
+        // 清除用户的排队抢单信息
+        redisTemplate.boundHashOps("UserQueueStatus").delete(userName);
+    }
 }

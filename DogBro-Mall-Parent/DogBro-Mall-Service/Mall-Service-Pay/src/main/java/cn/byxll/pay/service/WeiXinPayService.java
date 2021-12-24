@@ -14,9 +14,10 @@ public interface WeiXinPayService {
      * @param outTradeNo 客户端自定义订单编号
      * @param totalFee   交易金额,单位：分
      * @param orderType      订单类型 1->正常订单 2->秒杀订单
+     * @param userName       用户名
      * @return 响应数据
      */
-    Result<Map<String,String>> createNative(String outTradeNo, String totalFee, Integer orderType);
+    Result<Map<String,String>> createNative(String outTradeNo, String totalFee, Integer orderType, String userName);
 
     /**
      * 查询订单状态

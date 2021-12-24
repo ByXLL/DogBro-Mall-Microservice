@@ -4,6 +4,7 @@ import cn.byxll.seckill.pojo.SeckillOrder;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -29,11 +30,27 @@ public interface SeckillOrderService {
     Result<Boolean> delete(Long id);
 
     /**
+     * 通过用户名删除订单
+     * @param userName         用户名
+     * @return                 响应数据
+     */
+    Result<Boolean> deleteOrderByUserName(String userName);
+
+    /**
      * 修改SeckillOrder数据
      * @param seckillOrder      SeckillOrder实体
      * @return              响应数据
      */
     Result<Boolean> update(SeckillOrder seckillOrder);
+
+    /**
+     * 修改秒杀订单 支付状态
+     * @param userName           用户名
+     * @param transactionId      交易流水号
+     * @param payTime            支付时间
+     * @return             响应数据
+     */
+    Result<Boolean> updatePayStatus(String userName, String transactionId, String payTime) throws ParseException;
 
     /**
      * 根据ID查询SeckillOrder

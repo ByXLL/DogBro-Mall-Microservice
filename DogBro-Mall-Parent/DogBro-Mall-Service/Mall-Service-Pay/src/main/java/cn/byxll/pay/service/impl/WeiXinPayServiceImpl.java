@@ -75,12 +75,13 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
      * @param outTradeNo 客户端自定义订单编号
      * @param totalFee   交易金额,单位：分
      * @param orderType  订单类型 1->正常订单 2->秒杀订单
+     * @param userName   用户名
      * @return 响应数据
      */
     @Override
-    public Result<Map<String,String>> createNative(String outTradeNo, String totalFee, Integer orderType) {
-        if(StringUtils.isEmpty(outTradeNo) || StringUtils.isEmpty(totalFee)) { return new Result<>(false,StatusCode.ARGERROR,"参数异常",null); }
-        if(orderType == null || orderType != 1 || orderType !=2 ) { return new Result<>(false,StatusCode.ARGERROR,"参数异常,订单类型参数异常",null); }
+    public Result<Map<String,String>> createNative(String outTradeNo, String totalFee, Integer orderType, String userName) {
+        if(StringUtils.isEmpty(outTradeNo) || StringUtils.isEmpty(totalFee) || StringUtils.isEmpty(userName)) { return new Result<>(false,StatusCode.ARGERROR,"参数异常",null); }
+        if(orderType == null || (orderType != 1 && orderType !=2) ) { return new Result<>(false,StatusCode.ARGERROR,"参数异常,订单类型参数异常",null); }
         try {
             //1、封装参数
             HashMap<String,String> param = new HashMap<String,String>(16);
@@ -106,6 +107,7 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
             Map<String,String> attachMap = new HashMap<>(16);
             attachMap.put("exchange", orderType == 1 ? orderExchange : seckillOrderExchange);
             attachMap.put("routingKey",orderType == 1 ? orderRoutingKey : seckillOrderRoutingKey);
+            attachMap.put("userName",userName);
             String attachStr = JSON.toJSONString(attachMap);
             param.put("attach",attachStr);
 
