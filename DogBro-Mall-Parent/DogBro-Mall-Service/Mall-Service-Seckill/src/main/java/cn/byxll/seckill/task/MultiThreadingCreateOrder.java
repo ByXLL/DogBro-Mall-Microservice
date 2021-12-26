@@ -4,10 +4,13 @@ import cn.byxll.seckill.dao.SeckillGoodsMapper;
 import cn.byxll.seckill.dao.SeckillOrderMapper;
 import cn.byxll.seckill.pojo.SeckillGoods;
 import cn.byxll.seckill.pojo.SeckillOrder;
-import entity.Result;
+import com.alibaba.fastjson.JSON;
 import entity.SeckillStatus;
-import entity.StatusCode;
 import exception.OperationalException;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -24,11 +27,13 @@ public class MultiThreadingCreateOrder {
     private final RedisTemplate redisTemplate;
     private final SeckillGoodsMapper seckillGoodsMapper;
     private final SeckillOrderMapper seckillOrderMapper;
+    private final RabbitTemplate rabbitTemplate;
 
-    public MultiThreadingCreateOrder(RedisTemplate redisTemplate, SeckillGoodsMapper seckillGoodsMapper, SeckillOrderMapper seckillOrderMapper) {
+    public MultiThreadingCreateOrder(RedisTemplate redisTemplate, SeckillGoodsMapper seckillGoodsMapper, SeckillOrderMapper seckillOrderMapper, RabbitTemplate rabbitTemplate) {
         this.redisTemplate = redisTemplate;
         this.seckillGoodsMapper = seckillGoodsMapper;
         this.seckillOrderMapper = seckillOrderMapper;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     /**
@@ -112,6 +117,15 @@ public class MultiThreadingCreateOrder {
             seckillStatus.setStatus(2);
             // 更新用户抢单队列信息
             redisTemplate.boundHashOps("UserQueueStatus").put(userName,seckillStatus);
+            // 发送消息给延时队列 用于处理订单超时
+            rabbitTemplate.convertAndSend("delaySeckillQueue", (Object) JSON.toJSONString(seckillStatus), new MessagePostProcessor() {
+                @Override
+                public Message postProcessMessage(Message message) throws AmqpException {
+                    // 设置超时的时间 30分钟
+                    message.getMessageProperties().setExpiration("1800000");
+                    return message;
+                }
+            });
         }catch (Exception e) {
             e.printStackTrace();
         }

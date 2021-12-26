@@ -1,6 +1,7 @@
 package cn.byxll.seckill.mq;
 
 import cn.byxll.seckill.service.impl.SeckillOrderServiceImpl;
+import com.alibaba.fastjson.JSON;
 import com.github.wxpay.sdk.WXPayUtil;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -29,7 +30,7 @@ public class SecKillMessageListener {
     public void getMessage(String message) {
         System.out.println("监听到->秒杀订单支付成功");
         try {
-            Map<String,String> resultMap = WXPayUtil.xmlToMap(message);
+            Map<String,String> resultMap = JSON.parseObject(message,Map.class);
             // 通信标识
             String returnCode = resultMap.get("return_code");
             String outTradeNo = resultMap.get("out_trade_no");
